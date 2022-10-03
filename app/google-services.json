@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "115870460190",
+    "project_id": "knunity-963d0",
+    "storage_bucket": "knunity-963d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115870460190:android:26b6666a488d0e95c4810f",
+        "android_client_info": {
+          "package_name": "com.example.knunity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115870460190-fr1daqbs575f0umvh00pobpqm0aghsg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhvfBg9cmtym5KnwKGPVjAP2C1UyYUP8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115870460190-fr1daqbs575f0umvh00pobpqm0aghsg0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
