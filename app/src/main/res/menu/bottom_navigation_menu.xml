@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_Home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/fragment_Board"
+        android:enabled="true"
+        android:icon="@drawable/ic_board_24"
+        android:title="Board" />
+    <item
+        android:id="@+id/fragment_Unique"
+        android:enabled="true"
+        android:icon="@drawable/ic_search_24"
+        android:title="Search"
+        />
+    <item
+        android:id="@+id/fragment_Option"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_24"
+        android:title="Option" />
+</menu>
