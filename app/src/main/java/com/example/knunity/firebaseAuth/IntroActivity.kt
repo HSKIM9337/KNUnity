@@ -19,10 +19,10 @@ class IntroActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = Firebase.auth
 
-        Login_Join()
+        loginJoin()
     }
 
-    private fun Login_Join() {
+    private fun loginJoin() {
         binding.loginBtn.setOnClickListener() {
 
             val intent = Intent(this,LoginActivity::class.java)
