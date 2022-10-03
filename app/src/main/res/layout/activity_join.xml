@@ -41,33 +41,14 @@
 
             >
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/emailArea"
+                style="@style/AuthEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
+                android:layout_height="50dp"
+                android:hint="email">
 
-                <EditText
-                    android:id="@+id/emailArea"
-                    style="@style/AuthEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="4"
-                    android:hint="email">
-
-                </EditText>
-
-                <Button
-                    android:id="@+id/checkBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_radius_main_color"
-                    android:text="중복확인"
-                    android:textColor="#ffffff" />
-
-
-            </LinearLayout>
+            </EditText>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,88 +60,56 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/verificationLinear"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/verificationArea"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="4" />
-
-                <Button
-                    android:id="@+id/verificationBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_radius_main_color"
-                    android:text="인증하기"
-                    android:textColor="#ffffff" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/checkLinear"
+            <EditText
+                android:id="@+id/passwordArea1"
+                style="@style/AuthEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:hint="password"
+                android:inputType="textPassword">
+
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#999999"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/passwordArea1"
-                    style="@style/AuthEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="password"
-                    android:inputType="textPassword">
+            </LinearLayout>
 
-                </EditText>
+            <EditText
+                android:id="@+id/passwordArea2"
+                style="@style/AuthEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="passwordCheck"
+                android:inputType="textPassword">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#999999"
-                    android:orientation="vertical">
+            </EditText>
 
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/passwordArea2"
-                    style="@style/AuthEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="passwordCheck"
-                    android:inputType="textPassword">
-
-                </EditText>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#999999"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/joinBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/background_radius_main_color"
-                    android:text="가입하기"
-                    android:textColor="#ffffff" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#999999"
+                android:orientation="vertical">
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/joinBtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/background_radius_main_color"
+                android:text="가입하기"
+                android:textColor="#ffffff" />
+
+
         </LinearLayout>
 
 
