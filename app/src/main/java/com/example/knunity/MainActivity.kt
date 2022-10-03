@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         auth=Firebase.auth
-        binding.logoutBtn.setOnClickListener {
-            auth.signOut()
-            finish()
-
-        }
+//        binding.logoutBtn.setOnClickListener {
+//            auth.signOut()
+//            finish()
+//
+//        }
         setupBottomNavigationView()
     }
 
