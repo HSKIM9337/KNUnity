@@ -153,4 +153,4 @@ class JoinActivity : AppCompatActivity() {
 
         }
     }
-}
+}//join
