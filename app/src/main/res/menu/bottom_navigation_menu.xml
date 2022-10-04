@@ -17,8 +17,15 @@
         android:title="Search"
         />
     <item
+        android:id="@+id/fragment_Calculataor"
+        android:enabled="true"
+        android:icon="@drawable/ic_calculate_24"
+        android:title="Calculator"
+        />
+    <item
         android:id="@+id/fragment_Option"
         android:enabled="true"
         android:icon="@drawable/ic_settings_24"
         android:title="Option" />
+
 </menu>

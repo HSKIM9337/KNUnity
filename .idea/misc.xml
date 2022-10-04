@@ -15,7 +15,8 @@
         <entry key="..\:/Users/hskim/AndroidStudioProjects/kt/KNUnity/app/src/main/res/menu/top_navigation.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/activity_join.xml" value="0.1259259259259259" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_board.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_board.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_calculator.xml" value="0.19610507246376813" />
       </map>
     </option>
   </component>

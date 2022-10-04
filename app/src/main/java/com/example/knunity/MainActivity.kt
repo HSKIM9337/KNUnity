@@ -2,10 +2,7 @@ package com.example.knunity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.knunity.Fragments.BoardFragment
-import com.example.knunity.Fragments.HomeFragment
-import com.example.knunity.Fragments.OptionFragment
-import com.example.knunity.Fragments.UniqueFragment
+import com.example.knunity.Fragments.*
 import com.example.knunity.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -46,6 +43,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_Unique -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_layout, UniqueFragment())
+                        .commit()
+                    true
+                }
+                R.id.fragment_Calculataor -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, CalculatorFragment())
                         .commit()
                     true
                 }
