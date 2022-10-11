@@ -2,15 +2,12 @@ package com.example.knunity.firebaseAuth
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.knunity.MainActivity
-import com.example.knunity.R
-import com.example.knunity.databinding.ActivityIntroBinding
 import com.example.knunity.databinding.ActivityJoinBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -18,9 +15,10 @@ import com.google.firebase.ktx.Firebase
 
 class JoinActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    private val binding : ActivityJoinBinding by lazy {
+    private val binding: ActivityJoinBinding by lazy {
         ActivityJoinBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -28,19 +26,19 @@ class JoinActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        signup()
-//        sendemail()
+        signUp()
 
 
     }
+
     //회원가입하기
     //참고 https://firebase.google.com/docs/auth/android/start?hl=ko#kotlin+ktx_1
     // createuserwithemailandpassword 사용하면 됨.
-    private fun signup() {
+    private fun signUp() {
 
         //최초 linearlayout을 안보이게 만듦으로써, 인증안하면 회원가입 불가능하게 설정
-        binding.checkLinear.visibility=View.INVISIBLE
-        binding.verificationLinear.visibility=View.INVISIBLE
+        binding.checkLinear.visibility = View.INVISIBLE
+        binding.verificationLinear.visibility = View.INVISIBLE
 
 
         //중복 버튼 눌렀을시
@@ -58,15 +56,12 @@ class JoinActivity : AppCompatActivity() {
                         val isNewUser = task.result.signInMethods!!.isEmpty()
                         if (isNewUser) {
 
-                            builder.setMessage("사용 할 수 있는 이메일 입니다")
-                                .setPositiveButton(
-                                    "확인",
-                                    DialogInterface.OnClickListener { dialog, id -> })
-                            builder.create()
-                            builder.show()
+                            Toast.makeText(this, email + "로 인증 메일을 보냈습니다", Toast.LENGTH_SHORT)
+                                .show()
 
                             binding.verificationLinear.visibility = View.VISIBLE
-                            binding.checkLinear.visibility = View.VISIBLE
+                            check_VerificationCode()
+
 
                         } else {
                             builder.setMessage("사용 할 수 없는 이메일입니다.")
@@ -81,10 +76,10 @@ class JoinActivity : AppCompatActivity() {
                 }
             }
         }
+
         binding.joinBtn.setOnClickListener() {
 
             var isGoToJoin = true
-
 
 
             val email = binding.emailArea.text.toString()
@@ -138,36 +133,22 @@ class JoinActivity : AppCompatActivity() {
             }
 
 
-
-
         }
     }
 
-//    private fun sendemail() {
-//        binding.verificationBtn.setOnClickListener {
-//
-//            val emailAddress = binding.emailArea.text.toString()
-//            val title = "인증 번호입니다"
-//
-//            val content = (1000..9999).random()
-//
-//
-//            val intent = Intent(Intent.ACTION_SENDTO) // 메일 전송 설정
-//                .apply {
-//                    type = "text/plain" // 데이터 타입 설정
-//                    data = Uri.parse("mailto:") // 이메일 앱에서만 인텐트 처리되도록 설정
-//
-//                    putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress)) // 메일 수신 주소 목록
-//                    putExtra(Intent.EXTRA_SUBJECT, title) // 메일 제목 설정
-//                    putExtra(Intent.EXTRA_TEXT, content) // 메일 본문 설정
-//                }
-//
-//            if (intent.resolveActivity(packageManager) != null) {
-//                startActivity(Intent.createChooser(intent, "메일 전송하기"))
-//            } else {
-//                Toast.makeText(this, "메일을 전송할 수 없습니다", Toast.LENGTH_LONG).show()
-//            }
-//
-//        }
-//    }
-}//join
+    private fun check_VerificationCode() {
+
+        val verification = GMailSender().sendEmail(binding.emailArea.text.toString())
+        binding.verificationBtn.setOnClickListener {
+            if (binding.verificationArea.text.toString() == verification) {
+                Toast.makeText(this, "인증번호가 일치합니다", Toast.LENGTH_SHORT).show()
+                binding.checkLinear.visibility = View.VISIBLE
+            } else {
+                Toast.makeText(this, "인증번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this,binding.verificationArea.text.toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this,GMailSender().code,Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+}
