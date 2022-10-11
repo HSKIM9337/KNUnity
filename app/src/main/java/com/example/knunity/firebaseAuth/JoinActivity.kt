@@ -2,6 +2,7 @@ package com.example.knunity.firebaseAuth
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -28,6 +29,7 @@ class JoinActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         signup()
+//        sendemail()
 
 
     }
@@ -56,7 +58,7 @@ class JoinActivity : AppCompatActivity() {
                         val isNewUser = task.result.signInMethods!!.isEmpty()
                         if (isNewUser) {
 
-                            builder.setMessage(email + "로 인증번호를 보냈습니다")
+                            builder.setMessage("사용 할 수 있는 이메일 입니다")
                                 .setPositiveButton(
                                     "확인",
                                     DialogInterface.OnClickListener { dialog, id -> })
@@ -65,20 +67,7 @@ class JoinActivity : AppCompatActivity() {
 
                             binding.verificationLinear.visibility = View.VISIBLE
                             binding.checkLinear.visibility = View.VISIBLE
-                            // 이메일 보내기 추가안함.
-//                        val code = sendEmailVerification()
-//
-//                        if (code.toString() == binding.verificationArea.text.toString()) {
-//
-//                            binding.checkLinear.visibility = View.VISIBLE
-//
-//                        }
-//                        else {
-//                            builder.setMessage("인증번호를 확인해주세요")
-//                                .setPositiveButton("확인",DialogInterface.OnClickListener{dialog,id->})
-//                            builder.create()
-//                            builder.show()
-//                        }
+
                         } else {
                             builder.setMessage("사용 할 수 없는 이메일입니다.")
                                 .setPositiveButton(
@@ -153,4 +142,32 @@ class JoinActivity : AppCompatActivity() {
 
         }
     }
+
+//    private fun sendemail() {
+//        binding.verificationBtn.setOnClickListener {
+//
+//            val emailAddress = binding.emailArea.text.toString()
+//            val title = "인증 번호입니다"
+//
+//            val content = (1000..9999).random()
+//
+//
+//            val intent = Intent(Intent.ACTION_SENDTO) // 메일 전송 설정
+//                .apply {
+//                    type = "text/plain" // 데이터 타입 설정
+//                    data = Uri.parse("mailto:") // 이메일 앱에서만 인텐트 처리되도록 설정
+//
+//                    putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress)) // 메일 수신 주소 목록
+//                    putExtra(Intent.EXTRA_SUBJECT, title) // 메일 제목 설정
+//                    putExtra(Intent.EXTRA_TEXT, content) // 메일 본문 설정
+//                }
+//
+//            if (intent.resolveActivity(packageManager) != null) {
+//                startActivity(Intent.createChooser(intent, "메일 전송하기"))
+//            } else {
+//                Toast.makeText(this, "메일을 전송할 수 없습니다", Toast.LENGTH_LONG).show()
+//            }
+//
+//        }
+//    }
 }//join
