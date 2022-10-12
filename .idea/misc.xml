@@ -18,6 +18,8 @@
         <entry key="app/src/main/res/drawable/table_inside.xml" value="0.1635" />
         <entry key="app/src/main/res/drawable/table_outside.xml" value="0.1635" />
         <entry key="app/src/main/res/layout/activity_board_list.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/activity_checkactivity.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/activity_intro.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/layout/activity_join.xml" value="0.1259259259259259" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
