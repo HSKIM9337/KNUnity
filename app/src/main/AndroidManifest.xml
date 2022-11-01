@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
+            android:name=".BoardMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".checkactivity"
             android:exported="false" />
         <activity

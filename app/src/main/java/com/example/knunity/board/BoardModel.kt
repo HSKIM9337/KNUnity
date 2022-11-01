@@ -1,7 +1,8 @@
 package com.example.knunity.board
 //
-//data class BoardModel (
-//    val title: String,
-//    val uid: String,
-//    val contents: String
-//)
+data class BoardModel (
+    val uid: String="",
+    val title: String="",
+    val contents: String="",
+    val time : String=""
+)
