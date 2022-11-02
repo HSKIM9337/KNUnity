@@ -64,7 +64,9 @@ class BoardListActivity : AppCompatActivity() {
                 }
                 boardKeyList.reverse() //파이어베이스 이용 시에 필요
                 boardDataList.reverse()
-                myRecyclerViewAdapter.submitList(boardDataList)
+
+                myRecyclerViewAdapter.submitList(boardDataList.toList())
+
 
             }
 

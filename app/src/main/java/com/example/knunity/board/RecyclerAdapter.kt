@@ -28,4 +28,6 @@ class RecyclerAdapter : ListAdapter<BoardModel, RecyclerView.ViewHolder>(MydiffU
     }
 
 
+
+
 }
