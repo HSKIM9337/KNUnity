@@ -25,13 +25,10 @@ class BoardListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-
         useRV()
         getFBBoardData()
         move_to()
-
-
+        moveWrite()
     }
 
     private fun useRV() {
@@ -42,6 +39,13 @@ class BoardListActivity : AppCompatActivity() {
         }
 
     }
+    private fun moveWrite() {
+        binding.rvList.setOnClickListener{
+            val intent = Intent(this, BoardInsideActivity::class.java)
+            startActivity(intent)
+
+        }
+    }
 
     private fun move_to() {
         binding.WriteIV.setOnClickListener {
@@ -49,11 +53,9 @@ class BoardListActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
     private fun getFBBoardData() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 boardDataList.clear()
                 for (dataModel in snapshot.children) {
                     Log.d("check", dataModel.toString())
@@ -64,17 +66,12 @@ class BoardListActivity : AppCompatActivity() {
                 }
                 boardKeyList.reverse() //파이어베이스 이용 시에 필요
                 boardDataList.reverse()
-
                 myRecyclerViewAdapter.submitList(boardDataList.toList())
-
-
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
         }
         FBRef.boardRef.addValueEventListener(postListener)
     }
-
 }

@@ -7,4 +7,12 @@
     <string name="grade_C">C+ = 2.3, C0 = 2.0, C- = 1.7</string>
     <string name="grade_D">D+ = 1.3, D0 = 1.0, D- = 0.7</string>
     <string name="grade_F">F = 0.0</string>
+
+    <string-array name="menu">
+        <item>수정</item>
+        <item>삭제</item>
+        <item>신고하기</item>
+
+    </string-array>
 </resources>
+

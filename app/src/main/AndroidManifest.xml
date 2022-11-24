@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
-            android:name=".board.BoardWriteActivity"
+            android:name=".board.BoardEditActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".board.BoardInsideActivity"
             android:exported="false">
@@ -27,6 +29,13 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".board.BoardWriteActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".board.BoardListActivity"
             android:exported="false" />
