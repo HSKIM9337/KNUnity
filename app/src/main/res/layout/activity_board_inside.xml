@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".board.BoardInsideActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".board.BoardInsideActivity">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/titleArea"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="50dp"
+                                android:layout_marginRight="50dp"
+                                android:gravity="center"
+                                android:text="title"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                android:textStyle="bold"></TextView>
+
+                            <ImageView
+                                android:id="@+id/boardSettingIcon"
+                                android:layout_width="20dp"
+                                android:layout_height="40dp"
+                                android:layout_margin="10dp"
+                                android:src="@drawable/main_menu"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/black"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/timeArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:gravity="right"
+                        android:text="time">
+
+                    </TextView>
+                    <TextView
+                        android:id="@+id/uidArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:gravity="right"
+                        android:text="uid"/>
+
+                    <TextView
+                        android:id="@+id/contentArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/background_radius"
+                        android:padding="10dp"
+                        android:text="여기는 내용"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/getImageArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_margin="30dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/black"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/commentLV"
+                        android:layout_width="match_parent"
+                        android:layout_height="600dp" />
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/commentArea"
+                    android:layout_width="280dp"
+                    android:layout_height="match_parent"
+                    android:background="#999999"
+                    android:hint="댓글을 입력해주세요."
+                    android:padding="15dp"
+                    android:paddingLeft="5dp">
+
+
+                </EditText>
+
+                <ImageView
+                    android:id="@+id/commentIV"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:background="#999999"
+                    android:paddingRight="15dp"
+                    android:src="@drawable/comment">
+
+                </ImageView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
