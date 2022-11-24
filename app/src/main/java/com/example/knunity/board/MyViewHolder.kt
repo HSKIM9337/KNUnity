@@ -6,7 +6,7 @@ import com.example.knunity.databinding.BoardListItemViewBinding
 
 class MyViewHolder(private val binding: BoardListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
+//특정 키값에 해당하는 것은 어떻게 정하는가
     private val context = binding.root.context
         fun bind(data:BoardModel) {
             with(binding) {
