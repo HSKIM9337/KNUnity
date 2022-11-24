@@ -28,15 +28,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <!--
-activity
-            android:name=".BoardWriteActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity
-        -->
+
         <activity
             android:name=".board.BoardWriteActivity"
             android:exported="false">
@@ -44,19 +36,6 @@ activity
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <!--
-activity
-            android:name=".BoardMenuActivity"
-            android:exported="false" />
-        <activity
-            android:name=".checkactivity"
-            android:exported="false" /
-        -->
-        <!--
-activity
-            android:name=".board.BoardFreeActivity"
-            android:exported="false" /
-        -->
         <activity
             android:name=".board.BoardListActivity"
             android:exported="false" />

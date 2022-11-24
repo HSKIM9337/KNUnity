@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -55,6 +56,12 @@ class BoardInsideActivity : AppCompatActivity() {
         //  Log.d(Tag, title)
         // Log.d(Tag, contents)
         // Log.d(Tag, time)
+
+
+        val menus = arrayOf("수정","신고")
+        val spinnAdapter : ArrayAdapter<String> = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,menus)
+        val menuSpinner = binding.spinner
+        menuSpinner.adapter = spinnAdapter
 
     }
     private fun comment()
@@ -154,4 +161,12 @@ class BoardInsideActivity : AppCompatActivity() {
 //        })
 //
 //    }
+    private fun spinner() {
+
+        binding.spinner.setOnClickListener {
+
+        }
+
+
+    }
 }
