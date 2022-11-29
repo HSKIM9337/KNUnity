@@ -63,14 +63,15 @@
                     android:layout_margin="20dp"
                     android:gravity="center_vertical"
                     android:text="제목"
+                    android:textColor="@color/black"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
 
-                <LinearLayout
+                <!--LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/main_color"></LinearLayout>
+                    android:background="@color/main_color"></LinearLayout-->
 
                 <TextView
                     android:id="@+id/timePage"
@@ -85,25 +86,27 @@
                     android:id="@+id/contentPage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:padding="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="내용"
                     android:textColor="@color/black" />
 
                 <ImageView
                     android:id="@+id/imagePage"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="30dp" />
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center" />
 
                 <Button
+                    android:visibility="invisible"
                     android:id="@+id/updateBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="수정" />
 
                 <Button
+                    android:visibility="invisible"
                     android:id="@+id/deleteBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,8 +117,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:background="#999999" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/comment_list_item" />
+
 
             </LinearLayout>
+
         </ScrollView>
 
         <LinearLayout
@@ -139,5 +154,6 @@
                 android:layout_margin="10dp"
                 android:src="@drawable/ic_baseline_add_comment_24" />
         </LinearLayout>
+
     </RelativeLayout>
 </LinearLayout>
