@@ -18,7 +18,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,20 +30,18 @@
 
 
         <TextView
-
             android:text="글 쓰기"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="@color/black"
-
-            android:gravity="center"/>
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <!--LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_color"/>
+        android:background="@color/main_color"/-->
 
 
     <EditText
@@ -48,7 +49,7 @@
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:background="@android:color/transparent"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:hint="제목"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -57,7 +58,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/main_color"/>
+        android:background="@color/gray"/>
 
 
     <EditText
@@ -68,14 +69,8 @@
         android:hint="내용"
         android:gravity="left|top"
         android:scrollbars="vertical"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         tools:ignore="SpeakableTextPresentCheck" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/main_color"/>
 
     <ImageView
         android:layout_gravity="center"
@@ -83,7 +78,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/imageup"
+        android:src="@drawable/ic_baseline_camera_alt_24"
         />
 
     <Button
