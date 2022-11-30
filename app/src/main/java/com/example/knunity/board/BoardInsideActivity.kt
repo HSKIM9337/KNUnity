@@ -1,6 +1,5 @@
 package com.example.knunity.board
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +7,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.knunity.comment.CommentAdapter
 import com.example.knunity.comment.CommentModel
 import com.example.knunity.databinding.ActivityBoardInsideBinding
 import com.example.knunity.utils.FBAuth
@@ -20,10 +18,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_board_inside.*
 
 class BoardInsideActivity : AppCompatActivity() {
     private lateinit var key: String
@@ -41,11 +37,6 @@ class BoardInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        // val title = intent.getStringArrayExtra("title").toString()
-        //val contents = intent.getStringArrayExtra("contents").toString()
-        //val time = intent.getStringArrayExtra("time").toString()
-        //val uid = intent.getStringArrayExtra("uid").toString()
         
         datas = intent.getSerializableExtra("data") as BoardModel
         binding.titlePage.text = datas.title
@@ -60,7 +51,7 @@ class BoardInsideActivity : AppCompatActivity() {
         getImagefromFB(temp_keys+".png")
         deleteWrite(temp_keys)
        // useRV()//데이터 저장이 이상하게되어서 안씀
-        comment()
+        comment(key)
         editPage(temp_keys)
 
         //  Log.d(Tag, title)
@@ -74,12 +65,12 @@ class BoardInsideActivity : AppCompatActivity() {
         menuSpinner.adapter = spinnAdapter
         getCommentData()
     }
-    private fun comment()
+    private fun comment(key:String)
     {   binding.commentBtn.setOnClickListener {
         insertComment(key)
     }
     }
-    fun insertComment(key: String)
+    private fun insertComment(key: String)
     {
         val titleco = binding.commentArea.text.toString()
         val timeco = FBAuth.getTime()

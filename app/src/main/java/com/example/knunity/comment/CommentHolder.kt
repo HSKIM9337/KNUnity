@@ -1,4 +1,4 @@
-package com.example.knunity.board
+package com.example.knunity.comment
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.knunity.comment.CommentModel

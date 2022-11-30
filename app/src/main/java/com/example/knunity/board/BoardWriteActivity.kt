@@ -82,13 +82,6 @@ class BoardWriteActivity : AppCompatActivity() {
 
     }
 
-   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-       super.onActivityResult(requestCode, resultCode, data)
-       if (resultCode == RESULT_OK && requestCode == 10) {
-           binding.imageArea.setImageURI(data?.data)
-       }
-   }
-
     private fun write() {
         binding.writebtn.setOnClickListener {
             val title = binding.titleArea.text.toString()
