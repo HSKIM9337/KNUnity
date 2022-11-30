@@ -7,8 +7,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.knunity.comment.CommentAdapter
 import com.example.knunity.comment.CommentModel
@@ -31,7 +29,7 @@ class BoardInsideActivity : AppCompatActivity() {
     private val myRecyclerViewAdapter: CommentAdapter by lazy {
         CommentAdapter()
     }
-
+    //private val boardDataList = mutableListOf<BoardModel>()
     lateinit var datas: BoardModel
     private val commentDataList = mutableListOf<CommentModel>()
     private val commentKeyList = mutableListOf<String>()
@@ -39,63 +37,58 @@ class BoardInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        
         datas = intent.getSerializableExtra("data") as BoardModel
         binding.titlePage.text = datas.title
         binding.contentPage.text = datas.contents
         binding.timePage.text = datas.time
         val temp_keys=datas.key
-        val w_uid=datas.uid
-        val m_uid=FBAuth.getUid()
         key = intent.getStringExtra(temp_keys).toString()
         Log.d("test", temp_keys)
         getBoardData(temp_keys)
-        getCommentData()
         onBackPressed()
-        //Toast.makeText(this,temp_keys,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,temp_keys,Toast.LENGTH_SHORT).show()
         getImagefromFB(temp_keys+".png")
         deleteWrite(temp_keys)
-        useRV()
-        comment()
+       // useRV()//데이터 저장이 이상하게되어서 안씀
+        comment(key)
         editPage(temp_keys)
 
-        if(w_uid.equals(m_uid))
-        {
-        val menus = arrayOf("수정","삭제","신고")
+        //  Log.d(Tag, title)
+        // Log.d(Tag, contents)
+        // Log.d(Tag, time)
+
+
+        val menus = arrayOf("수정","신고")
         val spinnAdapter : ArrayAdapter<String> = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,menus)
         val menuSpinner = binding.spinner
         menuSpinner.adapter = spinnAdapter
-
-        }
-        else
-        {
-            val menus = arrayOf("신고")
-            val spinnAdapter : ArrayAdapter<String> = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,menus)
-            val menuSpinner = binding.spinner
-            menuSpinner.adapter = spinnAdapter
-        }
+        getCommentData()
     }
-    private fun comment()
+    private fun comment(key:String)
+    {   binding.commentBtn.setOnClickListener {
+        insertComment(key)
+    }
+    }
+    private fun insertComment(key: String)
     {
-        binding.commentBtn.setOnClickListener {
-        val key2=FBRef.commentRef.push().key.toString()
+        val titleco = binding.commentArea.text.toString()
+        val timeco = FBAuth.getTime()
         FBRef.commentRef
-            .child(key2)
-            //.push()
-            .setValue(CommentModel(binding.commentArea.text.toString(),FBAuth.getTime(),FBAuth.getUid()))
+            .child(key)
+            .push()
+            .setValue(titleco,timeco)
         Toast.makeText(this,"댓글 입력 완료",Toast.LENGTH_SHORT).show()
         binding.commentArea.setText("")
     }
-    }
-
-    private fun useRV() {
-        binding.rvList2.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter = myRecyclerViewAdapter
-        }
-
-    }
+//    private fun useRV() {
+//        binding.rvList.apply {
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTbICAL, false)
+//            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//            adapter = myRecyclerViewAdapter
+//        }
+//
+//    }
 
     private fun getBoardData(key: String) {
 
@@ -103,6 +96,8 @@ class BoardInsideActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dataModel = snapshot.getValue(BoardModel::class.java)
+               // binding.titlePage.setText(dataModel?.title)
+               // binding.commentArea.setText(dataModel?.contents)
                 val myUid = FBAuth.getUid()
                 val writeUid = dataModel?.uid
 
@@ -110,9 +105,13 @@ class BoardInsideActivity : AppCompatActivity() {
                 {
                     binding.updateBt.isVisible=true
                     binding.deleteBt.isVisible=true
+
                 }
+
             }
+
             override fun onCancelled(error: DatabaseError) {
+
             }
         }
         FBRef.boardRef.child(key).addValueEventListener(postListener)
@@ -132,10 +131,14 @@ class BoardInsideActivity : AppCompatActivity() {
     }
     private fun editPage(key: String) {
         binding.updateBt.setOnClickListener{
+           // FBRef.boardRef.child(key).setValue(BoardModel(binding.titlePage.text.toString(),binding.contentPage.text.toString(),binding.timePage.toString()))
 
             val intent = Intent(this, BoardEditActivity::class.java)
             intent.putExtra("temp_key",datas.key)
             startActivity(intent)
+
+            Toast.makeText(this,"수정 완료",Toast.LENGTH_SHORT).show()
+            //finish()
 
             }
     }
@@ -153,7 +156,6 @@ class BoardInsideActivity : AppCompatActivity() {
                 commentKeyList.reverse() //파이어베이스 이용 시에 필요
                 commentDataList.reverse()
                 myRecyclerViewAdapter.submitList(commentDataList.toList())
-
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("check", "loadPost:onCancelled", error.toException())
@@ -177,9 +179,28 @@ class BoardInsideActivity : AppCompatActivity() {
                 imageViewFromFB.isVisible = false
                 Toast.makeText(this,key,Toast.LENGTH_SHORT).show()
             }
+
         })
     }
-
+//    private fun getImageData(key: String) {
+//        // Reference to an image file in Cloud Storage
+//        val storageReference = Firebase.storage.reference.child(key + ".png")
+//        // ImageView in your Activity
+//        val imageViewFB = binding.imagePage
+//
+//
+//
+//        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                Glide.with(this)
+//                    .load(task.result)
+//                    .into(imageViewFB)
+//            } else {
+//                Toast.makeText(this, "FAIL TO LOAD", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//
+//    }
 override fun onBackPressed() {
     binding.writeBack.setOnClickListener {
         startActivity(Intent(this, BoardListActivity::class.java))
@@ -187,8 +208,11 @@ override fun onBackPressed() {
     }
 }
     private fun spinner() {
+
         binding.spinner.setOnClickListener {
 
         }
+
+
     }
 }

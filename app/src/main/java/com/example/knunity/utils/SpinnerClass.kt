@@ -3,7 +3,7 @@ package com.example.knunity.utils
 import android.app.Activity
 import android.view.View
 import android.widget.AdapterView
-import kotlinx.android.synthetic.main.activity_board_inside.*
+
 
 class SpinnerClass: Activity(), AdapterView.OnItemSelectedListener {
 
@@ -11,7 +11,16 @@ class SpinnerClass: Activity(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-        when(spinner.getItemAtPosition(p2)) {
+        when(p2) {
+            0-> {
+
+            }
+            1-> {
+
+            }
+            2-> {
+
+            }
 
 
 

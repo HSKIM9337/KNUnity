@@ -35,15 +35,25 @@ class BoardWriteActivity : AppCompatActivity() {
                 binding.imageArea.setImageURI(it)
             }
         )
-
+//
         binding.imageArea.setOnClickListener {
             getImage.launch("image/*")
             isImageUpload = true
         }
-
+//        imageUp()
         write()
         onBackPressed()
     }
+
+//    private fun imageUp() {
+//        binding.imageArea.setOnClickListener {
+//            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//     //       startActivityForResult(gallery, 10)
+//            getImage.lanuch("image/*")
+//
+//            isImageUpload = true
+//        }
+//    }
 
     private fun imageupload(key: String) {
         // Get the data from an ImageView as bytes
@@ -72,8 +82,6 @@ class BoardWriteActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun write() {
         binding.writebtn.setOnClickListener {
             val title = binding.titleArea.text.toString()
@@ -92,7 +100,7 @@ class BoardWriteActivity : AppCompatActivity() {
                 finish()
             } else {
                 finish()
-
+               // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
             }
 
 
