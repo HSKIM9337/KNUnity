@@ -1,4 +1,4 @@
-package com.example.knunity.board
+package com.example.knunity.comment
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.knunity.comment.CommentModel
@@ -12,6 +12,8 @@ class CommentHolder(private val binding: CommentListItemBinding)
         with(binding) {
             titleCo.text = data.commentTitle
             timeCo.text=data.commentCreatedTime
+            uidTv.text=data.commenteryUid
+
 //            titleTv.text = data.title
 //            contentsTv.text = data.contents
 //            timeTv.text = data.time

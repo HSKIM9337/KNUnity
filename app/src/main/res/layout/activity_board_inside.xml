@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -76,10 +78,11 @@
                 <TextView
                     android:id="@+id/timePage"
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
+                    android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="시간"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:layout_marginRight="10dp"/>
 
 
                 <TextView
@@ -98,6 +101,7 @@
                     android:layout_margin="10dp"
                     android:layout_gravity="center" />
 
+
                 <Button
                     android:visibility="invisible"
                     android:id="@+id/updateBt"
@@ -112,15 +116,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="삭제" />
-
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="#999999" />
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_list"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:id="@+id/rv_list2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -128,10 +127,15 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/comment_list_item" />
 
+                <!--ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#999999" /-->
+
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"

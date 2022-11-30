@@ -14,13 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
+            android:name=".comment.CommentListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".board.BoardEditActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".board.BoardInsideActivity"
             android:exported="false">
@@ -28,7 +34,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".board.BoardWriteActivity"
             android:exported="false">
