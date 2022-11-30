@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.knunity.databinding.ActivityBoardListBinding
 import com.example.knunity.databinding.BoardListItemViewBinding
 
-class RecyclerAdapter : ListAdapter<BoardModel, RecyclerView.ViewHolder>(MyDiffiUtill()) {
+class RecyclerAdapter : ListAdapter<BoardModel, RecyclerView.ViewHolder>(MydiffUtil()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
@@ -27,6 +26,8 @@ class RecyclerAdapter : ListAdapter<BoardModel, RecyclerView.ViewHolder>(MyDiffi
         )
         return viewHolder
     }
+
+
 
 
 }
