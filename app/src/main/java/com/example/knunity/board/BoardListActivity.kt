@@ -43,7 +43,6 @@ class BoardListActivity : AppCompatActivity() {
         binding.rvList.setOnClickListener{
             val intent = Intent(this, BoardInsideActivity::class.java)
             startActivity(intent)
-
         }
     }
 

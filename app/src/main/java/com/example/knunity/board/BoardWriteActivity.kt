@@ -102,8 +102,6 @@ class BoardWriteActivity : AppCompatActivity() {
                 finish()
                // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
             }
-
-
         }
     }
 

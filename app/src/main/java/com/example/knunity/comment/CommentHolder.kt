@@ -7,12 +7,13 @@ import com.example.knunity.databinding.CommentListItemBinding
 class CommentHolder(private val binding: CommentListItemBinding)
     :RecyclerView.ViewHolder(binding.root)
 {
-    private val context = binding.root.context
+    private val context2 = binding.root.context
     fun bind(data:CommentModel) {
         with(binding) {
             titleCo.text = data.commentTitle
             timeCo.text=data.commentCreatedTime
-            uidTv.text=data.commenteryUid
+            uidCo.text=data.commenteryUid
+
 
 //            titleTv.text = data.title
 //            contentsTv.text = data.contents

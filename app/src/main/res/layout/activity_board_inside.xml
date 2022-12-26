@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -111,6 +111,7 @@
                         android:src="@drawable/ic_baseline_mode_comment_24" />
 
                     <TextView
+                        android:id="@+id/commentCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
@@ -170,7 +171,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_list"
+                    android:id="@+id/rv_list2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical"
@@ -180,7 +181,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/comment_list_item" />
 
-                <Button
+                <!--Button
                     android:id="@+id/updateBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -193,12 +194,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="삭제"
-                    android:visibility="invisible" />
+                    android:visibility="invisible" /-->
 
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
