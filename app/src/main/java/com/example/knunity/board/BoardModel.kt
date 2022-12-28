@@ -9,4 +9,7 @@ data class BoardModel (
     val title: String="",
     val contents: String="",
     val time : String=""
+//    var likCount : String="",
+//    var comCount : String="",
+//    var scrCount : String=""
 ): Serializable

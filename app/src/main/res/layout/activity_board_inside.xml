@@ -99,6 +99,7 @@
                         android:src="@drawable/ic_baseline_thumb_up_24" />
 
                     <TextView
+                        android:id="@+id/likeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
@@ -124,6 +125,7 @@
                         android:src="@drawable/ic_baseline_turned_in_24" />
 
                     <TextView
+                        android:id="@+id/scrapCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
@@ -134,7 +136,7 @@
                 <ImageView
                     android:id="@+id/imagePage"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp" />
 
@@ -144,11 +146,12 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/likeBtn"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:layout_margin="5dp"
                         android:background="@color/main_color"
-                        android:drawableLeft="@drawable/ic_baseline_thumb_up_24"
+                        android:drawableLeft="@drawable/selector_thumb_up"
                         android:padding="5dp"
                         android:text="좋아요"
                         android:textColor="@color/white"
@@ -156,11 +159,12 @@
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/scrapBtn"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:layout_margin="5dp"
                         android:background="@color/main_color"
-                        android:drawableLeft="@drawable/ic_baseline_turned_in_24"
+                        android:drawableLeft="@drawable/selector_turned"
                         android:padding="5dp"
                         android:text="스크랩"
                         android:textColor="@color/white"
@@ -174,7 +178,10 @@
                     android:id="@+id/rv_list2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
                     android:scrollbars="vertical"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintVertical_bias="0.0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -197,13 +204,11 @@
                     android:visibility="invisible" /-->
 
 
-            </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:background="@color/white">
 
@@ -218,10 +223,12 @@
             <ImageView
                 android:id="@+id/commentBtn"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/ic_baseline_add_comment_24" />
         </LinearLayout>
+            </LinearLayout>
 
+        </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
 </LinearLayout>

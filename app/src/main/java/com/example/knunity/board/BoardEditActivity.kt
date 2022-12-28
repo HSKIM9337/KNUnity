@@ -37,7 +37,6 @@ class BoardEditActivity : AppCompatActivity() {
         val getImage = registerForActivityResult(
             ActivityResultContracts.GetContent(),
             ActivityResultCallback {
-
                 binding.imageArea.setImageURI(it)
             }
         )
@@ -59,7 +58,6 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
     private fun editBoardData(key: String) {
-
         FBRef.boardRef
             .child(key)
             .setValue(
@@ -69,6 +67,7 @@ class BoardEditActivity : AppCompatActivity() {
                     binding.titleArea.text.toString(),
                     binding.contentArea.text.toString(),
                     FBAuth.getTime()
+                //      .setValue(BoardModel(key,uid, title, contents, time))
                 )
             )
         if (isImageUpload) {
