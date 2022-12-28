@@ -35,7 +35,6 @@ class BoardInsideActivity : AppCompatActivity() {
     private val myRecyclerViewAdapter2: CommentAdapter by lazy {
         CommentAdapter()
     }
-    private var commentcoun : Int = 1
     lateinit var datas: BoardModel
     private val commentDataList = mutableListOf<CommentModel>()
     private val commentKeyList = mutableListOf<String>()
@@ -57,7 +56,6 @@ class BoardInsideActivity : AppCompatActivity() {
         binding.scrapBtn.setOnClickListener {
             scrap()
         }
-
         val temp_keys = datas.key
         key = temp_keys
         val writeuid = datas.uid
@@ -159,16 +157,17 @@ class BoardInsideActivity : AppCompatActivity() {
 
     private fun comment(key: String) {
         binding.commentBtn.setOnClickListener {
+            Log.d("comment",commentDataList.size.toString())
             val commentTitle = binding.commentArea.text.toString()
             val commentCreatedTime = FBAuth.getTime()
-            val commenteryUid = "익명"+commentcoun.toString()
+            val commenteryUid = "익명" + (commentDataList.size+1).toString()
             val mykey = FBRef.commentRef.push().key.toString()
             FBRef.commentRef
                 .child(mykey)
                 .setValue(CommentModel(commentTitle, commentCreatedTime, commenteryUid, key))
             Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
             binding.commentArea.setText("")
-            commentcoun++
+
         }
     }
 
@@ -239,6 +238,4 @@ class BoardInsideActivity : AppCompatActivity() {
         binding.scrapCount.text=scrapList.size.toString()
 //        datas.scrCount=scrapList.size.toString()
     }
-
-
 }
