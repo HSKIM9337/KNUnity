@@ -1,6 +1,7 @@
 package com.example.knunity.board
 
 
+import android.content.ClipData.Item
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,14 +22,18 @@ import com.example.knunity.utils.FBRef
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
+import com.sun.mail.imap.protocol.UID
+import kotlin.properties.Delegates
 
 
 class BoardInsideActivity : AppCompatActivity() {
     private lateinit var key: String
+    private var ulike :Boolean = false
     private val binding: ActivityBoardInsideBinding by lazy {
         ActivityBoardInsideBinding.inflate(layoutInflater)
     }
@@ -38,30 +43,36 @@ class BoardInsideActivity : AppCompatActivity() {
     lateinit var datas: BoardModel
     private val commentDataList = mutableListOf<CommentModel>()
     private val commentKeyList = mutableListOf<String>()
-    private val likeList = ArrayList<String>()
+    private val boardLikeList= mutableListOf<LikeBoardModel>()
+    private val likeList = mutableListOf<String>()
+    private val alllikeList = mutableListOf<String>()
     private val scrapList= ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         datas = intent.getSerializableExtra("data") as BoardModel
+       // blike = intent.getSerializableExtra("like") as LikeBoardModel
         binding.titlePage.text = datas.title
         binding.contentPage.text = datas.contents
         binding.timePage.text = datas.time
+        //var ulike=false
+//        firestore?.collection("follow")?.document(this.targetUserId!!)\
 //        binding.likeCount.text=datas.likCount
 //        binding.commentCount.text=datas.comCount
 //        binding.scrapCount.text=datas.scrCount
-        binding.likeBtn.setOnClickListener {
-            likethis()
-        }
+        //blike.userUid=FBAuth.getUid()
         binding.scrapBtn.setOnClickListener {
             scrap()
         }
+        var ilike=false
         val temp_keys = datas.key
+        val likekey = FBRef.boardRef.push().key.toString()
         key = temp_keys
         val writeuid = datas.uid
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
         val spinner2 = arrayListOf<String>("신고")
+        Log.d("liking22",likeList.toString())
         val spinner1_Parent =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, spinner1)
         val spinner2_Parent =
@@ -92,7 +103,8 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
             }
         }
-        else {
+        else
+        {
             binding.spinner.adapter = spinner2_Parent
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -100,11 +112,24 @@ class BoardInsideActivity : AppCompatActivity() {
 
                     }
                 }
-
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     TODO("Not yet implemented")
                 }
             }
+        }
+
+        likeCheck(temp_keys)
+        binding.likeBtn.setOnClickListener {
+        if(likeList.contains(FBAuth.getUid()))
+        {
+            dislike(temp_keys)
+        }
+        else
+        {
+
+            likethis(temp_keys)
+           }
+            likeCount(temp_keys)
         }
         Log.d("test", temp_keys)
         comment(temp_keys)
@@ -113,9 +138,7 @@ class BoardInsideActivity : AppCompatActivity() {
         useRV2()
         getImagefromFB(temp_keys + ".png")
     }
-
     private fun getCommentData(key: String) {
-//        binding.likeCount.text=datas.likCount
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 commentDataList.clear()
@@ -147,7 +170,6 @@ class BoardInsideActivity : AppCompatActivity() {
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
@@ -157,17 +179,17 @@ class BoardInsideActivity : AppCompatActivity() {
 
     private fun comment(key: String) {
         binding.commentBtn.setOnClickListener {
+//넘버db를 만들어서 넘버DB에 있는 COMMENTUID와 현재uid를 비교해서 같으면 FBRef.num.child(key).setvaule("번호",uid)
             Log.d("comment",commentDataList.size.toString())
             val commentTitle = binding.commentArea.text.toString()
             val commentCreatedTime = FBAuth.getTime()
-            val commenteryUid = "익명" + (commentDataList.size+1).toString()
+            val commenteryUid = FBAuth.getUid()
             val mykey = FBRef.commentRef.push().key.toString()
             FBRef.commentRef
                 .child(mykey)
                 .setValue(CommentModel(commentTitle, commentCreatedTime, commenteryUid, key))
             Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
             binding.commentArea.setText("")
-
         }
     }
 
@@ -208,21 +230,77 @@ class BoardInsideActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    private fun likethis() {
-
-            if (likeList.contains(datas.uid))
+    private fun likeCount(key:String)
+    {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot)
             {
-                 likeList.remove(datas.uid)
-                binding.likeBtn.isSelected=false
+                likeList.clear()
+                alllikeList.clear()
+                for (dataModel in snapshot.children) {
+                    val item = dataModel.getValue(LikeBoardModel::class.java)
+                    Log.d("item", item.toString())
+                    //if (key.equals(item?.boardKeydari)) {
+                        alllikeList.add(item!!.toString())
+                        if (FBAuth.getUid().equals(item?.userUid)) {
+                            likeList.add((item?.userUid.toString()))
+                            binding.likeBtn.isSelected = true
+                        } else {
+                            binding.likeBtn.isSelected = false
+                        }
+                    //}
+                }
+                Log.d("hh",alllikeList.toString())
+                binding.likeCount.text=alllikeList.size.toString()
             }
-            else
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("check", "loadPost:onCancelled", error.toException())
+            }
+        }
+        FBRef.likeboardRef.addValueEventListener(postListener)
+    }
+    private fun likeCheck(key:String)
+    {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot)
             {
-                likeList.add(datas.uid)
-                binding.likeBtn.isSelected=true
+                likeList.clear()
+                alllikeList.clear()
+                for (dataModel in snapshot.children) {
+                    val item = dataModel.getValue(LikeBoardModel::class.java)
+                    Log.d("item", item.toString())
+                    //if (key.equals(item?.boardKeydari)) {
+                        alllikeList.add(item!!.toString())
+                        if (FBAuth.getUid().equals(item?.userUid)) {
+                            likeList.add((item?.userUid.toString()))
+                            binding.likeBtn.isSelected = true
+                        } else {
+                            binding.likeBtn.isSelected = false
+                        }
+                    //}
+                }
+                Log.d("hh",alllikeList.toString())
+                binding.likeCount.text=alllikeList.size.toString()
             }
-        binding.likeCount.text=likeList.size.toString()
-//            datas.likCount=likeList.size.toString()
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("check", "loadPost:onCancelled", error.toException())
+            }
+        }
+        FBRef.likeboardRef.addValueEventListener(postListener)
+    }
+    private fun likethis(key: String) {
+
+        binding.likeBtn.isSelected = true
+
+        //FBRef.likeboardRef.child(like).setValue(LikeBoardModel(FBAuth.getUid(),key))
+        //FBRef.likeboardRef.child(key).
+        Log.d("like", likeList.size.toString())
+    }
+
+    private fun dislike(key: String)
+    {
+        binding.likeBtn.isSelected= false
+        FBRef.likeboardRef.child(key).removeValue()
     }
     private fun scrap() {
         if (scrapList.contains(datas.uid))
@@ -236,6 +314,5 @@ class BoardInsideActivity : AppCompatActivity() {
             binding.scrapBtn.isSelected=true
         }
         binding.scrapCount.text=scrapList.size.toString()
-//        datas.scrCount=scrapList.size.toString()
     }
 }

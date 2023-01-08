@@ -7,8 +7,6 @@ import com.example.knunity.databinding.CommentListItemBinding
 
 class CommentAdapter :
     androidx.recyclerview.widget.ListAdapter<CommentModel, RecyclerView.ViewHolder>(CommentUtill()) {
-
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CommentHolder) {
             val data = getItem(position) as CommentModel
@@ -26,6 +24,4 @@ class CommentAdapter :
         )
         return viewHolder
     }
-
-
 }

@@ -40,7 +40,6 @@ class BoardEditActivity : AppCompatActivity() {
                 binding.imageArea.setImageURI(it)
             }
         )
-
         binding.imageArea.setOnClickListener {
             getImage.launch("image/*")
             isImageUpload = true

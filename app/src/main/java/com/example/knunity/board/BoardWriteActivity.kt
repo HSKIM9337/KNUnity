@@ -24,10 +24,6 @@ class BoardWriteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-
-
-
         val getImage = registerForActivityResult(
             ActivityResultContracts.GetContent(),
             ActivityResultCallback {
@@ -62,10 +58,9 @@ class BoardWriteActivity : AppCompatActivity() {
 
 // Create a reference to "mountains.jpg"
         val mountainsRef = storageRef.child(key + ".png")
-
         val imageView = binding.imageArea
-        imageView.isDrawingCacheEnabled = true
-        imageView.buildDrawingCache()
+//        imageView.isDrawingCacheEnabled = true
+//        imageView.buildDrawingCache()
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
@@ -111,5 +106,4 @@ class BoardWriteActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }
