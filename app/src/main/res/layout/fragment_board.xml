@@ -80,6 +80,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/LikeListET"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:orientation="horizontal">
@@ -104,6 +105,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ScrapListET"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:orientation="horizontal">

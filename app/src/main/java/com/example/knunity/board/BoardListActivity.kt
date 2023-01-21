@@ -58,8 +58,8 @@ class BoardListActivity : AppCompatActivity() {
                 boardDataList.clear()
                 for (dataModel in snapshot.children) {
                     Log.d("check", dataModel.toString())
-
                     val item = dataModel.getValue(BoardModel::class.java)
+                    Log.d("item",item.toString())
                     boardDataList.add(item!!)
                     boardKeyList.add(dataModel.key.toString()) //키값을 전달받는다.
                 }

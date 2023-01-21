@@ -2,14 +2,12 @@ package com.example.knunity.board
 
 import java.io.Serializable
 
-
-data class BoardModel (
+data class ScrapModel(
     val key: String="",
-    var uid: String="",
+    val userUid: String="",
     val title: String="",
     val contents: String="",
     val time : String=""
-//    var likCount : String="",
-//    var comCount : String="",
-//    var scrCount : String=""
+   // val userUid: String=""
+
 ): Serializable

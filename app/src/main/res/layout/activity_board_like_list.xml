@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".board.BoardLikeActivity">
+    tools:context=".board.BoardLikeListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list"
+        android:id="@+id/rv_list4"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
@@ -18,16 +18,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/board_list_item_view" />
-
-    <!--ImageView
-        android:id="@+id/WriteIV"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/pen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" /-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

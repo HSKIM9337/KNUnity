@@ -12,6 +12,9 @@ class FBRef {
         val commentRef = database.getReference("comment")
 
         val likeboardRef = database.getReference("likeboard")
+
+        val scrapboardRef = database.getReference("scrap")
+        val likeRef = database.getReference("like")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }
