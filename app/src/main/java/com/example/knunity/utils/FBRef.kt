@@ -15,6 +15,9 @@ class FBRef {
 
         val scrapboardRef = database.getReference("scrap")
         val likeRef = database.getReference("like")
+        val mycommentRef = database.getReference("mycomment")
+        val couserRef = database.getReference("usercheck")
+        val declatioinRef = database.getReference("submit")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }

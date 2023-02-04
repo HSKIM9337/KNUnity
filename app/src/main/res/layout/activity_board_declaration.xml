@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".board.BoardDeclarationActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:id="@+id/writeBack"/>
+
+
+                <TextView
+                    android:text="글 쓰기"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp" />
+
+            </LinearLayout>
+
+            <!--LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/main_color"/-->
+
+
+            <TextView
+                style="@style/Widget.AppCompat.Spinner"
+                android:id="@+id/titleArea"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:background="@android:color/transparent"
+                android:layout_height="20dp"
+                android:hint="제목"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/gray"/>
+
+
+            <EditText
+                android:id="@+id/contentArea"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:background="@android:color/transparent"
+                android:hint="내용"
+                android:gravity="left|top"
+                android:scrollbars="vertical"
+                android:layout_height="wrap_content"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <!--ImageView
+                android:layout_gravity="center"
+                android:id="@+id/imageArea"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_baseline_camera_alt_24"
+                /-->
+
+            <Button
+                android:id="@+id/submitbtn"
+                android:text="등록"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/main_color"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/cancelbtn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="@color/main_color"
+                android:text="취소" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

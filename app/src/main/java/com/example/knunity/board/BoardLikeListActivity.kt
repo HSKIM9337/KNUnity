@@ -62,10 +62,8 @@ class BoardLikeListActivity : AppCompatActivity() {
                     for (dataModel in snapshot.children) {
                         Log.d("data", dataModel.toString())
                         val item2 = dataModel.getValue(LikeBoardModel::class.java)
-
                             boardDataList.add(item2!!)
                             boardKeyList.add(dataModel.key.toString())
-
                     }
                     boardKeyList.reverse() //파이어베이스 이용 시에 필요
                     boardDataList.reverse()

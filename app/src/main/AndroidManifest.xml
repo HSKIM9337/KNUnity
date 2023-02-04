@@ -14,19 +14,42 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
+            android:name=".board.BoardDeclarationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.BoardMycommentListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.BoardMyListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".board.BoardLikeListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <!--activity
+        <!--
+activity
             android:name=".ScrapInsideActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity-->
+        </activity
+        -->
         <activity
             android:name=".board.BoradScrapListActivity"
             android:exported="false">

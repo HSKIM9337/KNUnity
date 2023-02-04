@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.knunity.board.BoardLikeListActivity
 import com.example.knunity.board.BoardListActivity
+import com.example.knunity.board.BoardMyListActivity
 import com.example.knunity.board.BoradScrapListActivity
 import com.example.knunity.databinding.FragmentBoardBinding
 
@@ -22,7 +23,7 @@ class BoardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBoardBinding.inflate(inflater,container,false)
-
+        my_to()
         move_to()
         scrap_to()
         like_to()
@@ -34,6 +35,12 @@ class BoardFragment : Fragment() {
         super.onDestroyView()
     }
 
+    private fun my_to() {
+        binding.MyBoardET.setOnClickListener {
+            val intent = Intent(context,BoardMyListActivity::class.java)
+            startActivity(intent)
+        }
+    }
     private fun move_to() {
         binding.WriteFreeET.setOnClickListener {
             val intent = Intent(context,BoardListActivity::class.java)

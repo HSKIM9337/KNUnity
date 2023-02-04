@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.knunity.comment.CommentAdapter
 import com.example.knunity.comment.CommentModel
+import com.example.knunity.comment.MycommentModel
 import com.example.knunity.databinding.ActivityBoardInsideBinding
+import com.example.knunity.databinding.CommentListItemBinding
 import com.example.knunity.hotboard.LikeBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
@@ -45,6 +47,7 @@ class BoardInsideActivity : AppCompatActivity() {
     private val scrapList = mutableListOf<String>()
     private val allscrapList = mutableListOf<String>()
     private val commentCountList = mutableListOf<String>()
+    private var newCountList = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -55,6 +58,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val temp_keys = datas.key
         key = temp_keys
         val writeuid = datas.uid
+       // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
         val spinner2 = arrayListOf<String>("신고")
@@ -68,7 +72,8 @@ class BoardInsideActivity : AppCompatActivity() {
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 == 0) {
-
+                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
+                        startActivity(intent)
                     }
                     if (p2 == 1) {
                         editPage(temp_keys)
@@ -93,7 +98,11 @@ class BoardInsideActivity : AppCompatActivity() {
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 == 0) {
-
+                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
+                        startActivity(intent)
+//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
+//                        intent.putExtra("data",temp_keys)
+//                        startActivity(intent)
                     }
                 }
 
@@ -102,9 +111,11 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
             }
         }
-
+        //commentCheck(temp_keys)
+        //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)
         scrapCheck(temp_keys)
+       // commentCheck(temp_keys)
         binding.likeBtn.setOnClickListener {
             binding.likeBtn.isSelected = !binding.likeBtn.isSelected
             if (likeList.contains(FBAuth.getUid())) {
@@ -121,8 +132,13 @@ class BoardInsideActivity : AppCompatActivity() {
                 scrap(temp_keys)
             }
         }
+
         Log.d("test", temp_keys)
-        comment(temp_keys)
+
+        binding.commentBtn.setOnClickListener {
+            commentCheck(temp_keys)
+            comment(temp_keys)
+        }
         getCommentData(temp_keys)
         onBackPressed()
         useRV2()
@@ -169,63 +185,85 @@ class BoardInsideActivity : AppCompatActivity() {
         }
         FBRef.commentRef.addValueEventListener(postListener)
     }
-    private fun commentcount(key: String)
+
+    private fun commentCheck(key: String)
     {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                commentCountList.clear()
-                for (dataModel in snapshot.children) {
-                    val item = dataModel.getValue(CommentModel::class.java)
-                    Log.d("comment2", item.toString())
-                    if (key.equals(item?.boardKeyda)) {
-                            commentCountList.add(FBAuth.getUid())
-                    }
+                commentDataList.clear()
+                //newCountList.clear()
+                for (dataModel in snapshot.child(key).children) {
+                    val item = dataModel.getValue(MycommentModel::class.java)
+                    val uuuid =dataModel.key.toString()
+                    Log.d("comment3", dataModel.toString())
+                    Log.d("comment4",dataModel.key.toString())
+                        commentCountList.add(uuuid)
                 }
-                Log.d("cocount", commentCountList.toString())
+               // commentCountList.distinct()
+                //commentCountList.toSet()
+               // commentCountList.reverse()
+                //newCountList= commentCountList.distinct() as MutableList<String>
+                Log.d("cocount44", commentCountList.toString())
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
         }
-        FBRef.commentRef.addValueEventListener(postListener)
+        FBRef.mycommentRef.addValueEventListener(postListener)
     }
-    private fun removecount(key: String)
+    private fun commentCount(key: String)
     {
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (dataModel in snapshot.children) {
-                    val item = dataModel.getValue(CommentModel::class.java)
-                    Log.d("comment2", item.toString())
-                    if (key.equals(item?.boardKeyda)) {
-                        commentCountList.remove(FBAuth.getUid())
-                    }
-                }
-                Log.d("cocount", commentCountList.toString())
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("check", "loadPost:onCancelled", error.toException())
-            }
-        }
-        FBRef.commentRef.addValueEventListener(postListener)
+        val commentTitle = binding.commentArea.text.toString()
+        val commentCreatedTime = FBAuth.getTime()
+        val commenteryUid = FBAuth.getUid()
+      //  val colist = commentCountList.distinct()
+            Log.d("co_list",commentCountList.toString())
+        //    Log.d("colist2",colist.toString())
+        val mymykey = FBRef.mycommentRef.push().key.toString()
+//        val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
+//        val mykey = FBRef.commentRef.push().key.toString()
+        FBRef.mycommentRef
+            .child(key)
+            .child(FBAuth.getUid()).child(mymykey)
+            .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
     }
+
     private fun comment(key: String) {
-        binding.commentBtn.setOnClickListener {
-            var counting =0
+
 //넘버db를 만들어서 넘버DB에 있는 COMMENTUID와 현재uid를 비교해서 같으면 FBRef.num.child(key).setvaule("번호",uid)
-            Log.d("comment", commentDataList.size.toString())
+
+            //commentCountList.add(FBAuth.getUid())
+//            commentCount(key)
+           // commentCheck(key)
             val commentTitle = binding.commentArea.text.toString()
             val commentCreatedTime = FBAuth.getTime()
-            val commenteryUid = datas.uid
-            Log.d("colist",commentCountList.toString())
-            counting = commentCountList.size
-            var coUid = "익명"+counting
-            val mykey = FBRef.commentRef.push().key.toString()
-            FBRef.commentRef
-                .child(mykey)
-                .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
-            Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
+            val commenteryUid = FBAuth.getUid()
+         //   val colist = commentCountList.distinct()
+//            Log.d("colist",commentCountList.toString())
+//            Log.d("colist2",colist.toString())
+        // Log.d("newlist",newCountList.toString())
+        commentCountList.distinct()
+        commentCountList.reversed()
+
+        val mymykey = FBRef.mycommentRef.push().key.toString()
+        val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
+        val mykey = FBRef.commentRef.push().key.toString()
+        Log.d("colist2",commentCountList.toString())
+
+
+        FBRef.commentRef
+            .child(mykey)
+            .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
+        Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
+            //Log.d("colist",colist.toString())
+            FBRef.mycommentRef
+                .child(key)
+                .child(FBAuth.getUid()).child(mymykey)
+                .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
+           // commentCheck(key)
+
             binding.commentArea.setText("")
-        }
+
     }
 
     private fun useRV2() {
@@ -261,7 +299,7 @@ class BoardInsideActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {
-            startActivity(Intent(this, BoardListActivity::class.java))
+            //startActivity(Intent(this, BoardListActivity::class.java))
             finish()
         }
     }
@@ -292,7 +330,7 @@ class BoardInsideActivity : AppCompatActivity() {
                 } else {
                     binding.likeBtn.isSelected = false
                 }
-                if(alllikeList.size>=1)
+                if(alllikeList.size>=2)
                 {
                     FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
                 }
@@ -300,7 +338,6 @@ class BoardInsideActivity : AppCompatActivity() {
                 {
                     FBRef.likeboardRef.child(key).removeValue()
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {

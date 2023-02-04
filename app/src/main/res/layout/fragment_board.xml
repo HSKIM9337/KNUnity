@@ -29,6 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
+                    android:id="@+id/MyBoardET"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:orientation="horizontal">
@@ -41,7 +42,6 @@
                         android:src="@drawable/wirte"></ImageView>
 
                     <TextView
-                        android:id="@+id/WriteET"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_margin="15dp"
