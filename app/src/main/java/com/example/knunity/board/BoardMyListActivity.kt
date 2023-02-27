@@ -61,7 +61,6 @@ class BoardMyListActivity : AppCompatActivity() {
                 boardDataList.clear()
                 for (dataModel in snapshot.children) {
                     Log.d("check", dataModel.toString())
-
                     val item = dataModel.getValue(BoardModel::class.java)
                     Log.d("item", item.toString())
                     if (item?.uid.equals(FBAuth.getUid())) {

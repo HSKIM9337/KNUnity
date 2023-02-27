@@ -14,7 +14,7 @@ class ScrapViewHolder (private val binding: ScrapListItemViewBinding) :
             timeSc.text = data.time
             // uidTv.text =data.uid
             itemView.setOnClickListener{
-                val intent = Intent(context, BoardInsideActivity::class.java).apply {
+                val intent = Intent(context, ScrapInsideActivity::class.java).apply {
                     putExtra("data",data)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { context.startActivity(this) }

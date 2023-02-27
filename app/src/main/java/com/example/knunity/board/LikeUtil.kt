@@ -1,7 +1,6 @@
-package com.example.knunity.hotboard
+package com.example.knunity.board
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.knunity.board.ScrapModel
 
 class LikeUtil : DiffUtil.ItemCallback<LikeBoardModel>() {
     override fun areItemsTheSame(oldItem: LikeBoardModel, newItem: LikeBoardModel): Boolean {

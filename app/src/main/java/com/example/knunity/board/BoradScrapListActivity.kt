@@ -49,7 +49,7 @@ private val binding: ActivityBoradScrapListBinding by lazy {
     }
     private fun moveWrite() {
         binding.rvList3.setOnClickListener{
-            val intent = Intent(this, BoardInsideActivity::class.java)
+            val intent = Intent(this, ScrapInsideActivity::class.java)
             startActivity(intent)
         }
     }

@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.knunity.board.BoardLikeListActivity
-import com.example.knunity.board.BoardListActivity
-import com.example.knunity.board.BoardMyListActivity
-import com.example.knunity.board.BoradScrapListActivity
+import com.example.knunity.board.*
 import com.example.knunity.databinding.FragmentBoardBinding
 
 
@@ -25,6 +22,7 @@ class BoardFragment : Fragment() {
         _binding = FragmentBoardBinding.inflate(inflater,container,false)
         my_to()
         move_to()
+        comment_to()
         scrap_to()
         like_to()
         return binding.root
@@ -44,6 +42,12 @@ class BoardFragment : Fragment() {
     private fun move_to() {
         binding.WriteFreeET.setOnClickListener {
             val intent = Intent(context,BoardListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun comment_to(){
+        binding.CommentListET.setOnClickListener{
+            val intent = Intent(context,BoardMycommentListActivity::class.java)
             startActivity(intent)
         }
     }

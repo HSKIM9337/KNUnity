@@ -7,10 +7,6 @@ import android.util.Log
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.knunity.databinding.ActivityBoardLikeListBinding
-import com.example.knunity.databinding.ActivityBoradScrapListBinding
-import com.example.knunity.hotboard.LikeBoardModel
-import com.example.knunity.hotboard.LikeRecyclerAdapter
-import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,10 +17,12 @@ class BoardLikeListActivity : AppCompatActivity() {
             ActivityBoardLikeListBinding.inflate(layoutInflater)
 //    ActivityBoardListBinding.inflate(layoutInflater)
         }
+
         private val myRecyclerViewAdapter: LikeRecyclerAdapter by lazy {
             LikeRecyclerAdapter()
             //  RecyclerAdapter()
         }
+
         //lateinit var datas: ScrapModel
         private val scrapList = mutableListOf<String>()
         private val boardDataList = mutableListOf<LikeBoardModel>()
@@ -48,7 +46,7 @@ class BoardLikeListActivity : AppCompatActivity() {
         }
         private fun moveWrite() {
             binding.rvList4.setOnClickListener{
-                val intent = Intent(this, BoardInsideActivity::class.java)
+                val intent = Intent(this, HotBoardInsideActivity::class.java)
                 startActivity(intent)
             }
         }

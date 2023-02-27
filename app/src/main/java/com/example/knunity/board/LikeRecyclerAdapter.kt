@@ -1,14 +1,10 @@
-package com.example.knunity.hotboard
+package com.example.knunity.board
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.knunity.board.ScrapModel
-import com.example.knunity.board.ScrapUtil
-import com.example.knunity.board.ScrapViewHolder
 import com.example.knunity.databinding.LikeListItemViewBinding
-import com.example.knunity.databinding.ScrapListItemViewBinding
 
 class LikeRecyclerAdapter : ListAdapter<LikeBoardModel, RecyclerView.ViewHolder>(LikeUtil()) {
 

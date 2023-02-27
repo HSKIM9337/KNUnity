@@ -1,14 +1,14 @@
 package com.example.knunity.board
 
-
+import android.R
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +17,8 @@ import com.example.knunity.comment.CommentAdapter
 import com.example.knunity.comment.CommentBoardModel
 import com.example.knunity.comment.CommentModel
 import com.example.knunity.comment.MycommentModel
-import com.example.knunity.databinding.ActivityBoardInsideBinding
+import com.example.knunity.databinding.ActivityCommentBoardInsideBinding
+import com.example.knunity.databinding.ActivityScrapInsideBinding
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.android.gms.tasks.OnCompleteListener
@@ -28,17 +29,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 
-
-class BoardInsideActivity : AppCompatActivity() {
-    private lateinit var key: String
-
-    private val binding: ActivityBoardInsideBinding by lazy {
-        ActivityBoardInsideBinding.inflate(layoutInflater)
+class ScrapInsideActivity : AppCompatActivity() {
+    private val binding: ActivityScrapInsideBinding by lazy {
+        ActivityScrapInsideBinding.inflate(layoutInflater)
     }
     private val myRecyclerViewAdapter2: CommentAdapter by lazy {
         CommentAdapter()
     }
-    lateinit var datas: BoardModel
+    lateinit var datas2: ScrapModel
     private val commentDataList = mutableListOf<CommentModel>()
     private val commentKeyList = mutableListOf<String>()
     private val likeList = mutableListOf<String>()
@@ -50,37 +48,33 @@ class BoardInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        datas = intent.getSerializableExtra("data") as BoardModel
-        binding.titlePage.text = datas.title
-        binding.contentPage.text = datas.contents
-        binding.timePage.text = datas.time
-        val temp_keys = datas.key
-        key = temp_keys
-        val writeuid = datas.uid
-       // commentCheck(temp_keys)
+        datas2 = intent.getSerializableExtra("data") as ScrapModel
+        binding.titlePage.text = datas2.title
+        binding.contentPage.text = datas2.contents
+        binding.timePage.text = datas2.time
+        val temp_keys = datas2.key
+        //key = temp_keys
+        val writeuid = datas2.userUid
+        // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
-      //  val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
+        //  val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
         val spinner2 = arrayListOf<String>("▼","신고")
-        //val spinner2 = arrayListOf<String>("신고")
+
         val spinner1_Parent =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, spinner1)
+            ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, spinner1)
         val spinner2_Parent =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, spinner2)
+            ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, spinner2)
         if (writeuid.equals(youuid)) {
             binding.spinner.adapter = spinner1_Parent
-
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p2 == 0) {
+                    if(p2 == 0){
+
+                    }
+                    if (p2 == 1) {
 //                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
 //                        startActivity(intent)
-                    }
-                    if(p2==1)
-                    {
-                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
-                        startActivity(intent)
                     }
                     if (p2 == 2) {
                         editPage(temp_keys)
@@ -102,22 +96,22 @@ class BoardInsideActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             }
-        } else {
+        }
+        else {
             binding.spinner.adapter = spinner2_Parent
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 == 0) {
-                       //editPage(temp_keys)
+
                     }
-                    if (p2 == 1) {
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        startActivity(intent)
+                    if(p2==1){
+                        val intent = Intent(this@ScrapInsideActivity, BoardDeclarationActivity::class.java)
+                        startActivity(intent)
 //                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
 //                        intent.putExtra("data",temp_keys)
 //                        startActivity(intent)
                     }
                 }
-
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     TODO("Not yet implemented")
                 }
@@ -127,7 +121,7 @@ class BoardInsideActivity : AppCompatActivity() {
         //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)
         scrapCheck(temp_keys)
-       // commentCheck(temp_keys)
+        // commentCheck(temp_keys)
         binding.likeBtn.setOnClickListener {
             binding.likeBtn.isSelected = !binding.likeBtn.isSelected
             if (likeList.contains(FBAuth.getUid())) {
@@ -150,7 +144,6 @@ class BoardInsideActivity : AppCompatActivity() {
         binding.commentBtn.setOnClickListener {
             commentCheck(temp_keys)
             comment(temp_keys)
-            commentboard(temp_keys)
         }
         getCommentData(temp_keys)
         onBackPressed()
@@ -210,8 +203,12 @@ class BoardInsideActivity : AppCompatActivity() {
                     val uuuid =dataModel.key.toString()
                     Log.d("comment3", dataModel.toString())
                     Log.d("comment4",dataModel.key.toString())
-                        commentCountList.add(uuuid)
+                    commentCountList.add(uuuid)
                 }
+                // commentCountList.distinct()
+                //commentCountList.toSet()
+                // commentCountList.reverse()
+                //newCountList= commentCountList.distinct() as MutableList<String>
                 Log.d("cocount44", commentCountList.toString())
             }
             override fun onCancelled(error: DatabaseError) {
@@ -225,6 +222,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val commentTitle = binding.commentArea.text.toString()
         val commentCreatedTime = FBAuth.getTime()
         val commenteryUid = FBAuth.getUid()
+        //  val colist = commentCountList.distinct()
         Log.d("co_list",commentCountList.toString())
         //    Log.d("colist2",colist.toString())
         val mymykey = FBRef.mycommentRef.push().key.toString()
@@ -233,37 +231,38 @@ class BoardInsideActivity : AppCompatActivity() {
         FBRef.mycommentRef
             .child(key)
             .child(FBAuth.getUid()).child(mymykey)
-            .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
+            .setValue(MycommentModel(key,datas2.userUid, datas2.title, datas2.contents, datas2.time))
     }
 
     private fun comment(key: String) {
-            val commentTitle = binding.commentArea.text.toString()
-            val commentCreatedTime = FBAuth.getTime()
+
+//넘버db를 만들어서 넘버DB에 있는 COMMENTUID와 현재uid를 비교해서 같으면 FBRef.num.child(key).setvaule("번호",uid)
+
+        //commentCountList.add(FBAuth.getUid())
+//            commentCount(key)
+        // commentCheck(key)
+        val commentTitle = binding.commentArea.text.toString()
+        val commentCreatedTime = FBAuth.getTime()
+        val commenteryUid = FBAuth.getUid()
+        //   val colist = commentCountList.distinct()
+//            Log.d("colist",commentCountList.toString())
+//            Log.d("colist2",colist.toString())
+        // Log.d("newlist",newCountList.toString())
         commentCountList.distinct()
         commentCountList.reversed()
+
         val mymykey = FBRef.mycommentRef.push().key.toString()
         val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
         val mykey = FBRef.commentRef.push().key.toString()
         Log.d("colist2",commentCountList.toString())
+
+
         FBRef.commentRef
             .child(mykey)
             .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
-            FBRef.mycommentRef
-                .child(key)
-                .child(FBAuth.getUid()).child(mymykey)
-                .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
-            binding.commentArea.setText("")
-    }
+        binding.commentArea.setText("")
 
-    private fun commentboard(key: String)
-    {
-        val title = binding.titlePage.text.toString()
-        val contents = binding.contentPage.text.toString()
-        val time = binding.timePage.text.toString()
-        FBRef.comboardRef.child(key).child(FBAuth.getUid())
-            // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel(key, FBAuth.getUid(), title, contents, time))
     }
 
     private fun useRV2() {
@@ -276,7 +275,7 @@ class BoardInsideActivity : AppCompatActivity() {
 
     private fun editPage(key: String) {
         val intent = Intent(this, BoardEditActivity::class.java)
-        intent.putExtra("temp_key", datas.key)
+        intent.putExtra("temp_key", datas2.key)
         startActivity(intent)
         finish()
     }
@@ -311,12 +310,17 @@ class BoardInsideActivity : AppCompatActivity() {
                 alllikeList.clear()
                 for (dataModel in snapshot.child(key).children) {
                     val item = dataModel.getValue(LikingBoardModel::class.java)
+
                     Log.d("item", item?.userUid.toString())
+                    //  if (key.equals(item?.boardKeydari)) {
                     alllikeList.add(item!!.toString())
                     if (FBAuth.getUid().equals(item?.userUid)) {
                         likeList.add((item?.userUid.toString()))
+                        // binding.likeBtn.isSelected = true
                     } else {
+                        // binding.likeBtn.isSelected = false
                     }
+                    //}
                 }
                 Log.d("hh2", likeList.toString())
                 binding.likeCount.text = alllikeList.size.toString()
@@ -327,7 +331,7 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas2.title, datas2.contents, datas2.time))
                 }
                 else
                 {
@@ -389,7 +393,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val contents = binding.contentPage.text.toString()
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
-           // .setValue(ScrapModel(FBAuth.getUid()))
+            // .setValue(ScrapModel(FBAuth.getUid()))
             .setValue(ScrapModel(key, FBAuth.getUid(), title, contents, time))
     }
 

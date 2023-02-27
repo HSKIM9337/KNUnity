@@ -1,22 +1,24 @@
-package com.example.knunity.comment
+package com.example.knunity.secret
 
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
-import com.example.knunity.board.BoardInsideActivity
+import com.example.knunity.board.BoardSecretInsideActivity
 import com.example.knunity.board.CommentBoardInsideActivity
+import com.example.knunity.comment.CommentBoardModel
 import com.example.knunity.databinding.MycommentListItemViewBinding
+import com.example.knunity.databinding.SecretListItemViewBinding
 
-class MycommentHolder (private val binding: MycommentListItemViewBinding) :
+class SecretHolder(private val binding: SecretListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
-    fun bind(data:CommentBoardModel) {
+    fun bind(data: SecretBoardModel) {
         with(binding) {
-            titleMyco.text = data.title
-            contentsMyco.text = data.contents
-            timeMyco.text = data.time
+           // titleMyco.text = data.title
+            //contentsMyco.text = data.contents
+            timeTv.text = data.time
             // uidTv.text =data.uid
             itemView.setOnClickListener{
-                val intent = Intent(context, CommentBoardInsideActivity::class.java).apply {
+                val intent = Intent(context, BoardSecretInsideActivity::class.java).apply {
                     putExtra("data",data)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { context.startActivity(this) }
