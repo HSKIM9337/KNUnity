@@ -1,23 +1,25 @@
-package com.example.knunity.comment
+package com.example.knunity.secret
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.knunity.databinding.MycommentListItemViewBinding
+import com.example.knunity.board.*
+import com.example.knunity.databinding.SecretListItemViewBinding
 
-class MycommentAdapter: ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(MycommentUtill()) {
+class SecretAdapter : ListAdapter<SecretBoardModel, RecyclerView.ViewHolder>(SecretUtill()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is MycommentHolder) {
-            val data = getItem(position) as CommentBoardModel
+        if (holder is SecretHolder) {
+            val data = getItem(position) as SecretBoardModel
             holder.bind(data)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val viewHolder = MycommentHolder(
-            MycommentListItemViewBinding.inflate(
+        val viewHolder = SecretHolder(
+            SecretListItemViewBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -25,4 +27,5 @@ class MycommentAdapter: ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(
         )
         return viewHolder
     }
+
 }

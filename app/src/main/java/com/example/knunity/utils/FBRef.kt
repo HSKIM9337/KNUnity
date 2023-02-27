@@ -18,6 +18,9 @@ class FBRef {
         val mycommentRef = database.getReference("mycomment")
         val couserRef = database.getReference("usercheck")
         val declatioinRef = database.getReference("submit")
+        val decboardRef = database.getReference("dec")
+        val comboardRef = database.getReference("comb")
+        val secretboardRef = database.getReference("sec")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }

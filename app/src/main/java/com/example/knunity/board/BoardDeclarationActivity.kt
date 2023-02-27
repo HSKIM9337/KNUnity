@@ -1,13 +1,10 @@
 package com.example.knunity.board
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.knunity.databinding.ActivityBoardDeclarationBinding
-import com.example.knunity.databinding.ActivityBoardWriteBinding
-import com.example.knunity.hotboard.LikeBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.firebase.database.DataSnapshot
@@ -18,23 +15,21 @@ class BoardDeclarationActivity : AppCompatActivity() {
     private val binding: ActivityBoardDeclarationBinding by lazy {
         ActivityBoardDeclarationBinding.inflate(layoutInflater)
     }
-    lateinit var datas: BoardModel
+    lateinit var datas: DeclarationBoardModel
     private val keylist= mutableListOf<String>()
     private val submitlist = mutableListOf<String>()
     private val allsubmitlist = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        datas = intent.getSerializableExtra("data") as BoardModel
-        val temp_key = datas.key
-        Log.d("this key",temp_key)
-        submitCheck(temp_key)
+//        datas = intent.getSerializableExtra("data") as DeclarationBoardModel
+//        val temp_key = datas.key
+//        Log.d("this key",temp_key)
+        submitCheck(FBAuth.getUid())
         binding.submitbtn.setOnClickListener {
-            submit(temp_key)
+            submit(FBAuth.getUid())
         }
-        binding.cancelbtn.setOnClickListener {
             onBackPressed()
-        }
     }
     private fun submit(key:String)
     {
@@ -42,8 +37,7 @@ class BoardDeclarationActivity : AppCompatActivity() {
         Toast.makeText(parent, "제출완료", Toast.LENGTH_SHORT).show()
     }
     override fun onBackPressed() {
-        binding.writeBack.setOnClickListener {
-            //startActivity(Intent(this, BoardListActivity::class.java))
+        binding.cancelbtn.setOnClickListener {
             finish()
         }
     }
@@ -59,10 +53,9 @@ class BoardDeclarationActivity : AppCompatActivity() {
                     if (FBAuth.getUid().equals(item?.userUid)) {
                         submitlist.add((item?.userUid.toString()))
                         Toast.makeText(parent,"제출완료",Toast.LENGTH_SHORT).show()
-                    } else {
-
                     }
-
+                    else {
+                    }
                 }
                // Log.d("hh2", likeList.toString())
                 //binding.likeCount.text = alllikeList.size.toString()
@@ -76,7 +69,6 @@ class BoardDeclarationActivity : AppCompatActivity() {
                     FBRef.boardRef.child(key).removeValue()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }

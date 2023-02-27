@@ -1,4 +1,4 @@
-package com.example.knunity.hotboard
+package com.example.knunity.board
 
 import java.io.Serializable
 

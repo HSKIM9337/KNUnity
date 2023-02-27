@@ -3,22 +3,22 @@ package com.example.knunity.board
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import com.example.knunity.databinding.ActivityBoardWriteBinding
+import com.example.knunity.databinding.ActivitySecretWriteBinding
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
-class BoardWriteActivity : AppCompatActivity() {
-    private val binding: ActivityBoardWriteBinding by lazy {
-        ActivityBoardWriteBinding.inflate(layoutInflater)
+class SecretWriteActivity : AppCompatActivity() {
+    private val binding: ActivitySecretWriteBinding by lazy {
+        ActivitySecretWriteBinding.inflate(layoutInflater)
     }
     private var isImageUpload = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +73,8 @@ class BoardWriteActivity : AppCompatActivity() {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
         }
+
+
     }
 
     private fun write() {
@@ -93,14 +95,14 @@ class BoardWriteActivity : AppCompatActivity() {
                 finish()
             } else {
                 finish()
-               // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {
-            startActivity(Intent(this, BoardListActivity::class.java))
+            //startActivity(Intent(this, BoardListActivity::class.java))
             finish()
         }
     }
