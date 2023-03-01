@@ -263,7 +263,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.comboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(CommentBoardModel("자유게시판",key, FBAuth.getUid(), title, contents, time))
     }
 
     private fun useRV2() {
@@ -327,7 +327,7 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("자유게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
                 }
                 else
                 {
@@ -390,7 +390,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
            // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(ScrapModel("자유게시판",key, FBAuth.getUid(), title, contents, time))
     }
 
     private fun unscrap(key: String) {
@@ -398,3 +398,7 @@ class BoardInsideActivity : AppCompatActivity() {
     }
 
 }
+//게시판 이름 맞춰서 데이터베이스 저장
+//신고 게시판 완성
+//프레그먼트 즐겨찾기 완성
+//나머지 게시판 완성(비밀게시판은 익명,나머지는 공개)

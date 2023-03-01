@@ -25,6 +25,7 @@ class BoardFragment : Fragment() {
         comment_to()
         scrap_to()
         like_to()
+       // favorite()
         return binding.root
     }
 
@@ -33,6 +34,11 @@ class BoardFragment : Fragment() {
         super.onDestroyView()
     }
 
+    private fun favorite()
+    {
+        val free = binding.linearLayout3.getChildAt(0)
+
+    }
     private fun my_to() {
         binding.MyBoardET.setOnClickListener {
             val intent = Intent(context,BoardMyListActivity::class.java)

@@ -49,6 +49,7 @@ class ScrapInsideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         datas2 = intent.getSerializableExtra("data") as ScrapModel
+        binding.whatboard.text=datas2.what
         binding.titlePage.text = datas2.title
         binding.contentPage.text = datas2.contents
         binding.timePage.text = datas2.time

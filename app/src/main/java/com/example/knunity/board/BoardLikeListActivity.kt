@@ -60,6 +60,7 @@ class BoardLikeListActivity : AppCompatActivity() {
                     for (dataModel in snapshot.children) {
                         Log.d("data", dataModel.toString())
                         val item2 = dataModel.getValue(LikeBoardModel::class.java)
+
                             boardDataList.add(item2!!)
                             boardKeyList.add(dataModel.key.toString())
                     }
