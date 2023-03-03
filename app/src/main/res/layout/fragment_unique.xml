@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,7 +23,8 @@
                 android:layout_marginTop="5dp"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
-                android:text="키워드를 입력하시면 알려드려요."
+                android:textSize="13dp"
+                android:text="키워드를 입력하시면 알려드려요. \n키워드는 단어로 입력해주세요."
                 android:textColor="#999999"
                 android:textStyle="bold" />
 
@@ -35,6 +35,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/keywordCheck"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
@@ -51,27 +52,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                android:padding="15dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="1dp"
                     android:layout_height="20dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="2"
                     android:text="알림 받을 키워드"
                     android:textColor="#000000"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:id="@+id/keywordTVS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:paddingLeft="2dp"
                     android:paddingTop="2dp"
-                    android:text="3/10"
                     android:textColor="#999999" />
 
-
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/keywordRV"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>

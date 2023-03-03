@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.knunity.databinding.MycommentListItemViewBinding
 
-class MycommentAdapter: ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(MycommentUtill()) {
+class MycommentAdapter : ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(MycommentUtill()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MycommentHolder) {
