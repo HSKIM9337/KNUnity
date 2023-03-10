@@ -12,7 +12,7 @@ class FBRef {
         val commentRef = database.getReference("comment")
 
         val likeboardRef = database.getReference("likeboard")
-
+        val nickRef = database.getReference("nickname")
         val scrapboardRef = database.getReference("scrap")
         val likeRef = database.getReference("like")
         val mycommentRef = database.getReference("mycomment")
@@ -21,6 +21,8 @@ class FBRef {
         val decboardRef = database.getReference("dec")
         val comboardRef = database.getReference("comb")
         val secretboardRef = database.getReference("sec")
+        val jobRef = database.getReference("job")
+        val incruitRef = database.getReference("incruit")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }
