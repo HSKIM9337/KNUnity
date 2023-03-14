@@ -2,13 +2,20 @@ package com.example.knunity.board
 
 import android.R
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +55,7 @@ class JobInsideActivity : AppCompatActivity() {
     private val allscrapList = mutableListOf<String>()
     private val commentCountList = mutableListOf<String>()
     private var newCountList = mutableListOf<String>()
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -58,6 +66,7 @@ class JobInsideActivity : AppCompatActivity() {
         val temp_keys = datas.key
         key = temp_keys
         val writeuid = datas.uid
+        val text = binding.contentPage.text.toString()
         // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
@@ -70,9 +79,7 @@ class JobInsideActivity : AppCompatActivity() {
             ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, spinner2)
         if (writeuid.equals(youuid)) {
             binding.spinner.adapter = spinner1_Parent
-
             binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 == 0) {
 //                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
@@ -124,6 +131,23 @@ class JobInsideActivity : AppCompatActivity() {
                 }
             }
         }
+        val regex = """\b(?:https?://|www\.)\S+\b""".toRegex()
+        val linkifiedText = text.replace(regex) { result ->
+            val url = result.value
+            "<a href=\"$url\">$url</a>"
+        }
+        binding.contentPage.text= Html.fromHtml(linkifiedText, Html.FROM_HTML_MODE_COMPACT)
+
+        val linkClickListener = object : LinkMovementMethod() {
+            fun onClick(widget: View, span: ClickableSpan) {
+                val url = (span as URLSpan).url
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
+            }
+        }
+        binding.contentPage.movementMethod = linkClickListener
         //commentCheck(temp_keys)
         //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)

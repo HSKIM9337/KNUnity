@@ -39,6 +39,7 @@ class BoardListActivity : AppCompatActivity() {
         }
 
     }
+
     private fun moveWrite() {
         binding.rvList.setOnClickListener{
             val intent = Intent(this, BoardInsideActivity::class.java)

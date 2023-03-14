@@ -23,6 +23,7 @@ class FBRef {
         val secretboardRef = database.getReference("sec")
         val jobRef = database.getReference("job")
         val incruitRef = database.getReference("incruit")
+        val userRef = database.getReference("user")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }

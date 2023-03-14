@@ -2,13 +2,20 @@ package com.example.knunity.board
 
 import android.R
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +52,7 @@ class HotBoardInsideActivity : AppCompatActivity() {
     private val allscrapList = mutableListOf<String>()
     private val commentCountList = mutableListOf<String>()
     private var newCountList = mutableListOf<String>()
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -58,10 +66,27 @@ class HotBoardInsideActivity : AppCompatActivity() {
         val writeuid = datas2.userUid
         // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
+        val text = binding.contentPage.text.toString()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
         //  val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
         val spinner2 = arrayListOf<String>("▼","신고")
+        val regex = """\b(?:https?://|www\.)\S+\b""".toRegex()
+        val linkifiedText = text.replace(regex) { result ->
+            val url = result.value
+            "<a href=\"$url\">$url</a>"
+        }
+        binding.contentPage.text= Html.fromHtml(linkifiedText, Html.FROM_HTML_MODE_COMPACT)
 
+        val linkClickListener = object : LinkMovementMethod() {
+            fun onClick(widget: View, span: ClickableSpan) {
+                val url = (span as URLSpan).url
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
+            }
+        }
+        binding.contentPage.movementMethod = linkClickListener
         val spinner1_Parent =
             ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, spinner1)
         val spinner2_Parent =
@@ -80,10 +105,36 @@ class HotBoardInsideActivity : AppCompatActivity() {
                     if (p2 == 2) {
                         editPage(temp_keys)
                     }
-                    if (p2 == 3) {
+                    if ((p2 == 3)&&(datas2.what=="자유게시판")) {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()
                             FBRef.boardRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas2.what=="취업게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas2.what=="구인/구직게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
                             FBRef.scrapboardRef.child(temp_keys).removeValue()
                             FBRef.comboardRef.child(temp_keys).removeValue()
                             getRemoveData(temp_keys)

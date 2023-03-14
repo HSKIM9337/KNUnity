@@ -85,7 +85,7 @@ class BoardWriteActivity : AppCompatActivity() {
 
             FBRef.boardRef
                 .child(key)
-                .setValue(BoardModel(key,uid, title, contents, time))
+                .setValue(BoardModel("자유게시판",key,uid, title, contents, time))
             //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
             Toast.makeText(this, "게시글을 썼습니다", Toast.LENGTH_SHORT).show()
             if (isImageUpload) {

@@ -51,6 +51,7 @@ class BoardInsideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         datas = intent.getSerializableExtra("data") as BoardModel
+        binding.whatboard.text=datas.what
         binding.titlePage.text = datas.title
         binding.contentPage.text = datas.contents
         binding.timePage.text = datas.time
@@ -85,10 +86,36 @@ class BoardInsideActivity : AppCompatActivity() {
                     if (p2 == 2) {
                         editPage(temp_keys)
                     }
-                    if (p2 == 3) {
+                    if ((p2 == 3)&&(datas.what=="자유게시판")) {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()
                             FBRef.boardRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas.what=="취업게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas.what=="구인/구직게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
                             FBRef.scrapboardRef.child(temp_keys).removeValue()
                             FBRef.comboardRef.child(temp_keys).removeValue()
                             getRemoveData(temp_keys)

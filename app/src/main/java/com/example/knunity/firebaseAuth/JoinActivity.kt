@@ -9,8 +9,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.knunity.MainActivity
 import com.example.knunity.databinding.ActivityJoinBinding
+import com.example.knunity.utils.FBAuth
+import com.example.knunity.utils.FBRef
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 class JoinActivity : AppCompatActivity() {
@@ -76,6 +81,9 @@ class JoinActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.nicknameBtn.setOnClickListener {
+
+        }
 
         binding.joinBtn.setOnClickListener() {
 
@@ -83,8 +91,10 @@ class JoinActivity : AppCompatActivity() {
 
 
             val email = binding.emailArea.text.toString()
+            val nick = binding.nicknameArea.text.toString()
             val password1 = binding.passwordArea1.text.toString()
             val password2 = binding.passwordArea2.text.toString()
+
 
             if (email.isEmpty()) {
                 Toast.makeText(this, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -94,7 +104,11 @@ class JoinActivity : AppCompatActivity() {
                 Toast.makeText(this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
                 isGoToJoin = false
             }
-
+            if(nick.isEmpty())
+            {
+                Toast.makeText(this, "닉네임을 입력해주세요", Toast.LENGTH_SHORT).show()
+                isGoToJoin = false
+            }
             if (password2.isEmpty()) {
                 Toast.makeText(this, "비밀번호 확인을 입력해주세요", Toast.LENGTH_SHORT).show()
                 isGoToJoin = false
@@ -115,8 +129,6 @@ class JoinActivity : AppCompatActivity() {
             }
 
             if (isGoToJoin) {
-
-
                 auth.createUserWithEmailAndPassword(email, password1)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
@@ -150,5 +162,30 @@ class JoinActivity : AppCompatActivity() {
             }
         }
 
+    }
+    private fun createNickname(userId: String, nickname: String, callback: (Boolean) -> Unit) {
+        // Check if nickname already exists
+        checkNicknameExists(nickname) { exists ->
+            if (exists) {
+                callback(false)
+            } else {
+                // Save nickname to Firebase database
+                FBRef.userRef.child(userId).child("nickname").setValue(nickname)
+                callback(true)
+            }
+        }
+    }
+
+    private fun checkNicknameExists(nickname: String, callback: (Boolean) -> Unit) {
+        FBRef.userRef.orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot.exists())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(false)
+            }
+        })
     }
 }

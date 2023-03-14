@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.knunity.databinding.ActivityBoardWriteBinding
 import com.example.knunity.databinding.ActivityJobWriteBinding
+import com.example.knunity.job.JobModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.firebase.ktx.Firebase
@@ -84,7 +85,7 @@ class JobWriteActivity : AppCompatActivity() {
 
             FBRef.jobRef
                 .child(key)
-                .setValue(BoardModel(key,uid, title, contents, time))
+                .setValue(JobModel("취업게시판",key,uid, title, contents, time))
             //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
             Toast.makeText(this, "게시글을 썼습니다", Toast.LENGTH_SHORT).show()
             if (isImageUpload) {
@@ -99,7 +100,7 @@ class JobWriteActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {
-            startActivity(Intent(this, JobInsideActivity::class.java))
+           // startActivity(Intent(this, JobListActivity::class.java))
             finish()
         }
     }
