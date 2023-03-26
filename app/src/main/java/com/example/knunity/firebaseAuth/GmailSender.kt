@@ -13,7 +13,7 @@ class GMailSender : Authenticator() {
 
     val fromEmail = "hskim9337@knu.ac.kr"
     val password = "oduerzfklowbohcx"
-    val code = (100..10000).random().toString()
+
 
     // 보내는 사람 계정 확인
     override fun getPasswordAuthentication(): PasswordAuthentication {
@@ -22,6 +22,8 @@ class GMailSender : Authenticator() {
 
     // 메일 보내기
     fun sendEmail(toEmail: String): String {
+
+        val code = (100..10000).random().toString()
 
         CoroutineScope(Dispatchers.IO).launch {
             val props = Properties()
