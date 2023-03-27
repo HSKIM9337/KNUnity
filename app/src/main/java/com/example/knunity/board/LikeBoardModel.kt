@@ -8,7 +8,8 @@ data class LikeBoardModel(
     val userUid: String="",
     val title: String="",
     val contents: String="",
-    val time : String=""
+    val time : String="",
+    val nick: String=""
 ): Serializable
 
 

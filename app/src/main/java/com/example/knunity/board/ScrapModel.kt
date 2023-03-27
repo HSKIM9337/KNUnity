@@ -8,7 +8,7 @@ data class ScrapModel(
     val userUid: String="",
     val title: String="",
     val contents: String="",
-    val time : String=""
-   // val userUid: String=""
+    val time : String="",
+   val nick: String=""
 
 ): Serializable

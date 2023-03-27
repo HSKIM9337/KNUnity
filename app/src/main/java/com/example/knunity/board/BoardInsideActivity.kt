@@ -1,7 +1,9 @@
 package com.example.knunity.board
 
 
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +22,7 @@ import com.example.knunity.comment.MycommentModel
 import com.example.knunity.databinding.ActivityBoardInsideBinding
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
+import com.example.knunity.utils.UserModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,7 +34,7 @@ import com.google.firebase.storage.ktx.storage
 
 class BoardInsideActivity : AppCompatActivity() {
     private lateinit var key: String
-
+    private lateinit var nicknametotal : String
     private val binding: ActivityBoardInsideBinding by lazy {
         ActivityBoardInsideBinding.inflate(layoutInflater)
     }
@@ -55,8 +58,23 @@ class BoardInsideActivity : AppCompatActivity() {
         binding.titlePage.text = datas.title
         binding.contentPage.text = datas.contents
         binding.timePage.text = datas.time
+        binding.nick.text=datas.nick
         val temp_keys = datas.key
         key = temp_keys
+        FBRef.userRef.child(FBAuth.getUid()).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userModel = snapshot.getValue(UserModel::class.java)
+                nicknametotal = userModel?.nickname.toString() // 가져온 닉네임 정보
+
+                // 가져온 닉네임 정보를 사용하여 필요한 작업 수행
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 에러 발생시 처리
+                Log.w("FirebaseTest", "Failed to read value.", error.toException())
+            }
+        })
+
         val writeuid = datas.uid
        // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
@@ -81,7 +99,10 @@ class BoardInsideActivity : AppCompatActivity() {
                     if(p2==1)
                     {
                         val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
-                        startActivity(intent)
+                        intent.putExtra("postId", datas.uid)
+                        intent.putExtra("whatb",binding.whatboard.text)
+                        intent.putExtra("thiskey",key)
+                       startActivity(intent)
                     }
                     if (p2 == 2) {
                         editPage(temp_keys)
@@ -137,11 +158,12 @@ class BoardInsideActivity : AppCompatActivity() {
                        //editPage(temp_keys)
                     }
                     if (p2 == 1) {
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        startActivity(intent)
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        intent.putExtra("data",temp_keys)
-//                        startActivity(intent)
+
+                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
+                        intent.putExtra("postId", datas.uid)
+                        intent.putExtra("whatb",binding.whatboard.text)
+                        intent.putExtra("thiskey",key)
+                        startActivity(intent)
                     }
                 }
 
@@ -184,7 +206,38 @@ class BoardInsideActivity : AppCompatActivity() {
         useRV2()
         getImagefromFB(temp_keys + ".png")
     }
-
+    fun uploadFileToFB(fileUri: Uri, fileName: String) {
+        val storageReference = Firebase.storage.reference.child(fileName)
+        storageReference.putFile(fileUri)
+            .addOnSuccessListener {
+                Log.d(TAG, "uploadFileToFB: success")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "uploadFileToFB: failed")
+            }
+            .addOnProgressListener { taskSnapshot ->
+                val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount)
+                Log.d(TAG, "uploadFileToFB: $progress")
+            }
+            .addOnPausedListener { taskSnapshot ->
+                Log.d(TAG, "uploadFileToFB: paused")
+            }
+    }
+    private fun getImagefromFB(key: String) {
+        val storageReference = Firebase.storage.reference.child(key)
+        val imageViewFromFB = binding.imagePage
+        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Glide.with(this)
+                    .load(task.result)
+                    .into(imageViewFromFB)
+            } else {
+                binding.imagePage.isVisible = false
+                imageViewFromFB.isVisible = false
+                //       Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
     private fun getCommentData(key: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -274,7 +327,7 @@ class BoardInsideActivity : AppCompatActivity() {
         Log.d("colist2",commentCountList.toString())
         FBRef.commentRef
             .child(mykey)
-            .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
+            .setValue(CommentModel(commentTitle, commentCreatedTime, nicknametotal, key))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
             FBRef.mycommentRef
                 .child(key)
@@ -290,7 +343,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.comboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel("자유게시판",key, FBAuth.getUid(), title, contents, time))
+            .setValue(CommentBoardModel("자유게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun useRV2() {
@@ -308,21 +361,7 @@ class BoardInsideActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun getImagefromFB(key: String) {
-        val storageReference = Firebase.storage.reference.child(key)
-        val imageViewFromFB = binding.imagePage
-        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(this)
-                    .load(task.result)
-                    .into(imageViewFromFB)
-            } else {
-                binding.imagePage.isVisible = false
-                imageViewFromFB.isVisible = false
-                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {
@@ -354,7 +393,7 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("자유게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("자유게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time,datas.nick))
                 }
                 else
                 {
@@ -417,7 +456,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
            // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel("자유게시판",key, FBAuth.getUid(), title, contents, time))
+            .setValue(ScrapModel("자유게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun unscrap(key: String) {

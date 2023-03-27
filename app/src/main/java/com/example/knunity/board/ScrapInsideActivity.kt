@@ -343,7 +343,7 @@ class ScrapInsideActivity : AppCompatActivity() {
             } else {
                 binding.imagePage.isVisible = false
                 imageViewFromFB.isVisible = false
-                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
             }
         })
     }

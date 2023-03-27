@@ -13,6 +13,7 @@ class MyViewHolder(private val binding: BoardListItemViewBinding) :
                 titleTv.text = data.title
                 contentsTv.text = data.contents
                 timeTv.text = data.time
+                nick.text=data.nick
                // uidTv.text =data.uid
                 itemView.setOnClickListener{
                     val intent = Intent(context, BoardInsideActivity::class.java).apply {
