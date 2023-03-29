@@ -26,6 +26,7 @@ class BoardFragment : Fragment() {
         scrap_to()
         like_to()
         job_to()
+        secret_to()
         incruit_to()
        // favorite()
         return binding.root
@@ -35,6 +36,7 @@ class BoardFragment : Fragment() {
         _binding = null
         super.onDestroyView()
     }
+
 
     private fun favorite()
     {
@@ -75,6 +77,13 @@ class BoardFragment : Fragment() {
     {
         binding.JobET.setOnClickListener {
             val intent=Intent(context,JobListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun secret_to()
+    {
+        binding.SecretET.setOnClickListener {
+            val intent = Intent(context,BoardSecretListActivity::class.java)
             startActivity(intent)
         }
     }

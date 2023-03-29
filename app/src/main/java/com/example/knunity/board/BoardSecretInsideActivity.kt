@@ -1,6 +1,7 @@
 package com.example.knunity.board
 
 import android.R
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +24,11 @@ import com.example.knunity.databinding.ActivityBoardSecretInsideBinding
 import com.example.knunity.secret.SecretBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
+import com.example.knunity.utils.FBRef.Companion.reportRef
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
@@ -58,6 +62,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         val temp_keys = datas.key
         key = temp_keys
         val writeuid = datas.userUid
+
         // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
@@ -75,21 +80,79 @@ class BoardSecretInsideActivity : AppCompatActivity() {
 
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 == 0) {
-//                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
-//                        startActivity(intent)
-                    }
+                        }
                     if(p2==1)
                     {
-                        val intent = Intent(this@BoardSecretInsideActivity, BoardDeclarationActivity::class.java)
-                        startActivity(intent)
-                    }
+                        val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
+                        builder.setTitle("신고합니다.")
+                            .setMessage("신고하시겠습니까?")
+                            .setNegativeButton("확인") { dialog, _ ->
+                                // 현재 유저의 ID 가져오기
+                                val userId = FBAuth.getUid()
+                                val postId = temp_keys
+                                // 해당 게시물에 대한 신고 정보 가져오기
+                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.hasChild(userId)) {
+                                            // 이미 신고한 유저인 경우
+                                            Toast.makeText(this@BoardSecretInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            // 처음 신고하는 유저인 경우
+                                            val reportId = reportRef.child(postId).push().key
+                                            val reportData = hashMapOf(
+                                                "userId" to userId,
+                                                "timestamp" to ServerValue.TIMESTAMP
+                                            )
+                                            reportRef.child(postId).child(userId).setValue(reportData)
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+
+                                // 삭제 여부 확인하기
+                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.childrenCount >= 2) {
+                                            // 두 명 이상이 신고한 경우
+                                            // 게시물 삭제 처리하기
+                                            FBRef.secretboardRef.child(postId).removeValue()
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                                    finish()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {}
+                                })
+                            }
+                            .setPositiveButton("취소")
+                            {dialog,_->
+                                dialog.dismiss()
+                            }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+         }
                     if (p2 == 2) {
                         editPage(temp_keys)
                     }
                     if (p2 == 3) {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()
-                            FBRef.boardRef.child(temp_keys).removeValue()
+                            FBRef.secretboardRef.child(temp_keys).removeValue()
                             FBRef.scrapboardRef.child(temp_keys).removeValue()
                             FBRef.comboardRef.child(temp_keys).removeValue()
                             getRemoveData(temp_keys)
@@ -111,12 +174,70 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                         //editPage(temp_keys)
                     }
                     if (p2 == 1) {
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        startActivity(intent)
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        intent.putExtra("data",temp_keys)
-//                        startActivity(intent)
+                        val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
+                        builder.setTitle("신고합니다.")
+                            .setMessage("신고하시겠습니까?")
+                            .setNegativeButton("확인") { dialog, _ ->
+                                // 현재 유저의 ID 가져오기
+                                val userId = FBAuth.getUid()
+                                val postId = temp_keys
+                                // 해당 게시물에 대한 신고 정보 가져오기
+                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.hasChild(userId)) {
+                                            // 이미 신고한 유저인 경우
+                                            Toast.makeText(this@BoardSecretInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            // 처음 신고하는 유저인 경우
+                                            val reportData = hashMapOf(
+                                                "userId" to userId,
+                                                "timestamp" to ServerValue.TIMESTAMP
+                                            )
+                                            reportRef.child(postId).child(userId).setValue(reportData)
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+
+                                // 삭제 여부 확인하기
+                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.childrenCount >= 2) {
+                                            // 두 명 이상이 신고한 경우
+                                            // 게시물 삭제 처리하기
+                                            FBRef.secretboardRef.child(postId).removeValue()
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                                    finish()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+
+                                        }
+
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {}
+                                })
+                            }
+                            .setPositiveButton("취소")
+                            {dialog,_->
+                                dialog.dismiss()
+                            }.show()
+
                     }
+
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -243,13 +364,28 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         commentCountList.distinct()
         commentCountList.reversed()
         val mymykey = FBRef.mycommentRef.push().key.toString()
-        val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
         val mykey = FBRef.commentRef.push().key.toString()
+        if(FBAuth.getUid().equals(datas.userUid)){
+//            val subuid = FBAuth.getUid().substring(FBAuth.getUid().length-6,FBAuth.getUid().length)
+            val coUid = "익명(작성자)"
+//            val mykey = FBRef.commentRef.push().key.toString()
+            Log.d("colist2",commentCountList.toString())
+            FBRef.commentRef
+                .child(mykey)
+                .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
+            Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
+        }
+        else
+        {
+        val subuid = FBAuth.getUid().substring(FBAuth.getUid().length-6,FBAuth.getUid().length)
+        val coUid = "익명("+subuid+")"
+   //            val mykey = FBRef.commentRef.push().key.toString()
         Log.d("colist2",commentCountList.toString())
         FBRef.commentRef
             .child(mykey)
             .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
+        }
         FBRef.mycommentRef
             .child(key)
             .child(FBAuth.getUid()).child(mymykey)
@@ -329,7 +465,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("비밀게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
                 }
                 else
                 {
@@ -392,7 +528,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(ScrapModel("비밀게시판",key, FBAuth.getUid(), title, contents, time))
     }
 
     private fun unscrap(key: String) {

@@ -13,8 +13,8 @@ class SecretHolder(private val binding: SecretListItemViewBinding) :
     private val context = binding.root.context
     fun bind(data: SecretBoardModel) {
         with(binding) {
-           // titleMyco.text = data.title
-            //contentsMyco.text = data.contents
+          titleTv.text=data.title
+            contentsTv.text = data.contents
             timeTv.text = data.time
             // uidTv.text =data.uid
             itemView.setOnClickListener{
