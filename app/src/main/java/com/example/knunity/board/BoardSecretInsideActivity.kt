@@ -62,7 +62,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         val temp_keys = datas.key
         key = temp_keys
         val writeuid = datas.userUid
-
+        var currentDialog: AlertDialog? = null
         // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
@@ -83,6 +83,8 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                         }
                     if(p2==1)
                     {
+                        currentDialog?.dismiss()
+                        currentDialog = null
                         val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
@@ -118,7 +120,6 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                     }
 
                                 })
-
                                 // 삭제 여부 확인하기
                                 reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -135,16 +136,19 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                                 }
                                         }
                                     }
-
                                     override fun onCancelled(error: DatabaseError) {}
                                 })
+                                dialog.cancel()
+                                //currentDialog = null
                             }
                             .setPositiveButton("취소")
                             {dialog,_->
-                                dialog.dismiss()
+                                dialog.cancel()
+                               // currentDialog = null
                             }
                         val alertDialog = builder.create()
                         alertDialog.show()
+                        currentDialog = alertDialog
          }
                     if (p2 == 2) {
                         editPage(temp_keys)
@@ -174,6 +178,9 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                         //editPage(temp_keys)
                     }
                     if (p2 == 1) {
+                        currentDialog?.dismiss()
+                        currentDialog = null
+
                         val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
@@ -189,6 +196,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                             Toast.makeText(this@BoardSecretInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
                                         } else {
                                             // 처음 신고하는 유저인 경우
+                                            val reportId = reportRef.child(postId).push().key
                                             val reportData = hashMapOf(
                                                 "userId" to userId,
                                                 "timestamp" to ServerValue.TIMESTAMP
@@ -208,7 +216,6 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                     }
 
                                 })
-
                                 // 삭제 여부 확인하기
                                 reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -223,28 +230,45 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                                 .addOnFailureListener { e ->
                                                     Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
                                                 }
-
                                         }
-
                                     }
-
                                     override fun onCancelled(error: DatabaseError) {}
                                 })
+                                dialog.cancel()
+                                //currentDialog = null
                             }
                             .setPositiveButton("취소")
                             {dialog,_->
-                                dialog.dismiss()
-                            }.show()
-
+                                dialog.cancel()
+                                //currentDialog = null
+                            }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+                        currentDialog = alertDialog
                     }
-
                 }
-
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     TODO("Not yet implemented")
                 }
             }
         }
+//        reportRef.child(temp_keys).addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.childrenCount >= 2) {
+//                    // 두 명 이상이 신고한 경우
+//                    // 게시물 삭제 처리하기
+//                    FBRef.secretboardRef.child(temp_keys).removeValue()
+//                        .addOnSuccessListener {
+//                            Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+//                            finish()
+//                        }
+//                        .addOnFailureListener { e ->
+//                            Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+//                        }
+//                }
+//            }
+//            override fun onCancelled(error: DatabaseError) {}
+//        })
         //commentCheck(temp_keys)
         //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)
