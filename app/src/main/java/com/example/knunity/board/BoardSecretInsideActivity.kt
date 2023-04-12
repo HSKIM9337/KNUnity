@@ -83,8 +83,6 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                         }
                     if(p2==1)
                     {
-                        currentDialog?.dismiss()
-                        currentDialog = null
                         val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
@@ -107,6 +105,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                             )
                                             reportRef.child(postId).child(userId).setValue(reportData)
                                                 .addOnSuccessListener {
+                                                  // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
                                                     Toast.makeText(this@BoardSecretInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                                                 }
                                                 .addOnFailureListener { e ->
@@ -114,41 +113,25 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                                 }
                                         }
                                     }
-
                                     override fun onCancelled(error: DatabaseError) {
                                         Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
                                     }
-
                                 })
                                 // 삭제 여부 확인하기
-                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        if (snapshot.childrenCount >= 2) {
-                                            // 두 명 이상이 신고한 경우
-                                            // 게시물 삭제 처리하기
-                                            FBRef.secretboardRef.child(postId).removeValue()
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                                                    finish()
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                    }
-                                    override fun onCancelled(error: DatabaseError) {}
-                                })
-                                dialog.cancel()
-                                //currentDialog = null
+
+                                dialog.dismiss()
+                                currentDialog = null
                             }
                             .setPositiveButton("취소")
                             {dialog,_->
-                                dialog.cancel()
-                               // currentDialog = null
+                                dialog.dismiss()
+                                currentDialog = null
+
                             }
                         val alertDialog = builder.create()
                         alertDialog.show()
                         currentDialog = alertDialog
+                        binding.spinner.setSelection(0)
          }
                     if (p2 == 2) {
                         editPage(temp_keys)
@@ -178,9 +161,6 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                         //editPage(temp_keys)
                     }
                     if (p2 == 1) {
-                        currentDialog?.dismiss()
-                        currentDialog = null
-
                         val builder = AlertDialog.Builder(this@BoardSecretInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
@@ -203,6 +183,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                                             )
                                             reportRef.child(postId).child(userId).setValue(reportData)
                                                 .addOnSuccessListener {
+                                                   // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
                                                     Toast.makeText(this@BoardSecretInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                                                 }
                                                 .addOnFailureListener { e ->
@@ -217,34 +198,18 @@ class BoardSecretInsideActivity : AppCompatActivity() {
 
                                 })
                                 // 삭제 여부 확인하기
-                                reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        if (snapshot.childrenCount >= 2) {
-                                            // 두 명 이상이 신고한 경우
-                                            // 게시물 삭제 처리하기
-                                            FBRef.secretboardRef.child(postId).removeValue()
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                                                    finish()
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                    }
-                                    override fun onCancelled(error: DatabaseError) {}
-                                })
-                                dialog.cancel()
-                                //currentDialog = null
+                                dialog.dismiss()
+                                currentDialog = null
                             }
                             .setPositiveButton("취소")
                             {dialog,_->
-                                dialog.cancel()
-                                //currentDialog = null
+                                dialog.dismiss()
+                                currentDialog = null
                             }
                         val alertDialog = builder.create()
                         alertDialog.show()
                         currentDialog = alertDialog
+                        binding.spinner.setSelection(0)
                     }
                 }
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -252,23 +217,24 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                 }
             }
         }
-//        reportRef.child(temp_keys).addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.childrenCount >= 2) {
-//                    // 두 명 이상이 신고한 경우
-//                    // 게시물 삭제 처리하기
-//                    FBRef.secretboardRef.child(temp_keys).removeValue()
-//                        .addOnSuccessListener {
-//                            Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-//                            finish()
-//                        }
-//                        .addOnFailureListener { e ->
-//                            Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
-//                        }
-//                }
-//            }
-//            override fun onCancelled(error: DatabaseError) {}
-//        })
+        reportRef.child(temp_keys).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.childrenCount >= 2) {
+                    // 두 명 이상이 신고한 경우
+                    // 게시물 삭제 처리하기
+                    reportRef.child(temp_keys).removeEventListener(this) // 이벤트 리스너 등록 해제
+                    FBRef.secretboardRef.child(temp_keys).removeValue()
+                        .addOnSuccessListener {
+                            Toast.makeText(this@BoardSecretInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this@BoardSecretInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
         //commentCheck(temp_keys)
         //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)
@@ -466,7 +432,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         }
     }
 
-    private fun likeCheck(key: String) {
+    private fun  likeCheck(key: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 likeList.clear()
@@ -501,7 +467,6 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
         }
-
         FBRef.likeRef.addValueEventListener(postListener)
     }
 

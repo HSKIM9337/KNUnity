@@ -212,6 +212,7 @@ activity
         </activity>
         <activity
             android:name=".MainActivity"
+
             android:exported="true" />
     </application>
 

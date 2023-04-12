@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.knunity.Fragments.*
 import com.example.knunity.databinding.ActivityMainBinding
 import com.example.knunity.firebaseAuth.IntroActivity
@@ -21,24 +23,45 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         auth = Firebase.auth
+
 //        binding.logoutBtn.setOnClickListener {
 //            auth.signOut()
 //            finish()
 //
 //        }
+        binding.settingBtn.setOnClickListener{
+            val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_profile -> {
+                    // 개인정보 화면으로 이동
+                    true
+                }
+                R.id.menu_settings -> {
+                    // 설정 화면으로 이동
+                    true
+                }
+                R.id.menu_logout -> {
+                   logout() // 로그아웃 처리
+                    true
+                }
+                else -> false
+            }
+        }
+
         setupBottomNavigationView()
-        logout()
     }
 
     private fun logout() {
-        binding.settingBtn.setOnClickListener {
+
             auth.signOut()
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
             finish()
             Toast.makeText(this,"로그아웃하였습니다.",Toast.LENGTH_SHORT).show()
 
-        }
     }
 
     private fun setupBottomNavigationView() {
@@ -78,6 +101,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
