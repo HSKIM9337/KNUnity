@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.knunity.Fragments.*
+import com.example.knunity.board.BoardMyListActivity
 import com.example.knunity.databinding.ActivityMainBinding
 import com.example.knunity.firebaseAuth.IntroActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -23,7 +25,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         auth = Firebase.auth
-
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, HomeFragment())
+            .commit()
 //        binding.logoutBtn.setOnClickListener {
 //            auth.signOut()
 //            finish()
@@ -41,6 +45,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menu_settings -> {
                     // 설정 화면으로 이동
+                    binding.bottomNavigationView.menu.getItem(4).isChecked=true
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, OptionFragment())
+                        .commit()
                     true
                 }
                 R.id.menu_logout -> {
