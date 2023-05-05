@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,19 +30,44 @@ class BoardWriteActivity : AppCompatActivity() {
     }
     private lateinit var nick : String
     private var isFileUpload = false
-    private var selectedImageUri: Uri? = null
+    private var selectedFileUri: Uri? = null
+    private var isVideoSelected = false
     //private var isImageUpload = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val getFile = registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            ActivityResultCallback { uri ->
-                binding.imageArea.setImageURI(uri)
-                selectedImageUri = uri
-                isFileUpload = true
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val uri = result.data?.data
+                if (uri != null) {
+                    selectedFileUri = uri
+                    isFileUpload = true
+                    if (uri.toString().contains("image")) {
+                        // If image file selected, show in imageView
+                        binding.imageArea.setImageURI(uri)
+                        binding.imageArea.visibility = View.VISIBLE
+                        binding.videoView.visibility = View.GONE
+                        binding.webView.visibility = View.GONE
+                    } else if (uri.toString().contains("video")) {
+                        // If video file selected, show in videoView
+                        binding.videoView.setVideoURI(uri)
+                        binding.videoView.start()
+                        binding.imageArea.visibility = View.GONE
+                        binding.videoView.visibility = View.VISIBLE
+                        binding.webView.visibility = View.GONE
+                        isVideoSelected = true
+                    } else {
+                        // If animated gif selected, show in webView
+                        binding.webView.loadUrl(uri.toString())
+                        binding.imageArea.visibility = View.GONE
+                        binding.videoView.visibility = View.GONE
+                        binding.webView.visibility = View.VISIBLE
+                    }
+                }
             }
-        )
+        }
 //
         FBRef.userRef.child(FBAuth.getUid()).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -57,23 +83,36 @@ class BoardWriteActivity : AppCompatActivity() {
             }
         })
         binding.imageArea.setOnClickListener {
-            getFile.launch("*/*")
-            //isImageUpload = true
+            // Launch the file picker
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+            }
+            val chooser = Intent.createChooser(intent, "Select File")
+            getFile.launch(chooser)
         }
-//        imageUp()
+        binding.webView.setOnClickListener{
+            // Launch the file picker
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+            }
+            val chooser = Intent.createChooser(intent, "Select File")
+            getFile.launch(chooser)
+        }
+        binding.videoView.setOnClickListener{
+            // Launch the file picker
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+            }
+            val chooser = Intent.createChooser(intent, "Select File")
+            getFile.launch(chooser)
+        }
+
+
         write()
         onBackPressed()
     }
 
-//    private fun imageUp() {
-//        binding.imageArea.setOnClickListener {
-//            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//     //       startActivityForResult(gallery, 10)
-//            getImage.lanuch("image/*")
-//
-//            isImageUpload = true
-//        }
-//    }
+
 private fun fileUpload(key: String, uri: Uri) {
     val storage = Firebase.storage
     val storageRef = storage.reference
@@ -88,29 +127,6 @@ private fun fileUpload(key: String, uri: Uri) {
         // ...
     }
 }
-//    private fun imageupload(key: String) {
-//        // Get the data from an ImageView as bytes
-//        val storage = Firebase.storage
-//        val storageRef = storage.reference
-//
-//// Create a reference to "mountains.jpg"
-//        val mountainsRef = storageRef.child(key + ".png")
-//        val imageView = binding.imageArea
-////        imageView.isDrawingCacheEnabled = true
-////        imageView.buildDrawingCache()
-//        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-//        val baos = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
-//        val data = baos.toByteArray()
-//
-//        var uploadTask = mountainsRef.putBytes(data)
-//        uploadTask.addOnFailureListener {
-//            // Handle unsuccessful uploads
-//        }.addOnSuccessListener { taskSnapshot ->
-//            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-//            // ...
-//        }
-//    }
 
     private fun write() {
         binding.writebtn.setOnClickListener {
@@ -125,8 +141,8 @@ private fun fileUpload(key: String, uri: Uri) {
                 .setValue(BoardModel("자유게시판",key,uid, title, contents, time,nick))
             //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
             Toast.makeText(this, "게시글을 썼습니다", Toast.LENGTH_SHORT).show()
-                if (isFileUpload && selectedImageUri != null) {
-                    fileUpload(key, selectedImageUri!!)
+                if (isFileUpload && selectedFileUri  != null) {
+                    fileUpload(key, selectedFileUri !!)
                 }
             finish()
                // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()

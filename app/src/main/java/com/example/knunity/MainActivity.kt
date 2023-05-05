@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.knunity.Fragments.*
 import com.example.knunity.board.BoardMyListActivity
 import com.example.knunity.databinding.ActivityMainBinding
+import com.example.knunity.firebaseAuth.ChangeActivity
 import com.example.knunity.firebaseAuth.IntroActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -28,11 +29,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, HomeFragment())
             .commit()
-//        binding.logoutBtn.setOnClickListener {
-//            auth.signOut()
-//            finish()
-//
-//        }
+
         binding.settingBtn.setOnClickListener{
             val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
             drawerLayout.openDrawer(GravityCompat.END)
@@ -40,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_profile -> {
+                    val intent = Intent(this, ChangeActivity::class.java)
+                    startActivity(intent)
+                    finish()
                     // 개인정보 화면으로 이동
                     true
                 }
