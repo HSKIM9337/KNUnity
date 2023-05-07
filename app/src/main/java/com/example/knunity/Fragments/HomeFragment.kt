@@ -128,12 +128,14 @@ class HomeFragment : Fragment() {
             }
             // 해당 색을 이용해 SpannableString 생성
             val spannableString = SpannableString("${dayOfWeek?.let { getWeekdayName(it) }}")
-            spannableString.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(requireContext(), textColor)),
-                0,
-                spannableString.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+           context?.let {
+               spannableString.setSpan(
+                   ForegroundColorSpan(ContextCompat.getColor(requireContext(), textColor)),
+                   0,
+                   spannableString.length,
+                   Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+               )
+           }
             return spannableString
         }
 

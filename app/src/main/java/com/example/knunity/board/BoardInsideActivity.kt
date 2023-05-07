@@ -273,54 +273,66 @@ class BoardInsideActivity : AppCompatActivity() {
     }
 
     private fun getImagefromFB(key: String) {
-        val storageReference = Firebase.storage.reference.child(key)
+        val storageReference = Firebase.storage.reference
         val imageViewFromFB = binding.imagePage
         val videoViewFromFB = binding.videoView
         val gifViewFromFB = binding.webView
-        Log.d("mime2",storageReference.metadata.toString())
-        storageReference.metadata.addOnSuccessListener { metadata ->
-            val mimeType = metadata.contentType.toString() // MIME 유형
-            Log.d("mime",mimeType.toString())
-            if (mimeType == "image/jpeg" || mimeType == "image/png") {
-                storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Glide.with(this)
-                            .load(task.result)
-                            .into(imageViewFromFB)
-                        videoViewFromFB.isVisible=false
-                        gifViewFromFB.isVisible=false
-                        imageViewFromFB.isVisible=true
-                    } else {
-                        videoViewFromFB.isVisible = false
-                        gifViewFromFB.isVisible = false
-                        binding.imagePage.isVisible = false
-                        imageViewFromFB.isVisible = false
-                        Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
-                    }
-                })
-            // 이미지 처리 로직
-            } else if (mimeType == "video/mp4") {
-                storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    videoViewFromFB.setVideoURI(task.result)
-                    imageViewFromFB.isVisible = false
-                    videoViewFromFB.isVisible = true
-                    gifViewFromFB.isVisible = false
-                    videoViewFromFB.start()
-                } else {
-                    imageViewFromFB.isVisible = false
-                    videoViewFromFB.isVisible = false
-                    gifViewFromFB.isVisible = false
-                    Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
-                }
-            })
+        storageReference.listAll().addOnSuccessListener { listResult ->
+            listResult.items.forEach { item ->
 
-                // 비디오 처리 로직
+                if (item.name.substring(0, item.name.length - 4) == key) {
+                    // key와 일치하는 파일을 찾음
+                    val extension = item.name.takeLast(4).lowercase() // 파일 이름에서 마지막 4글자 추출
+                    Log.d("extension", extension)
+
+                    if (extension == ".png") {
+                        storageReference.child(key).downloadUrl.addOnCompleteListener{ task ->
+                            if (task.isSuccessful) {
+                                Log.d("check",task.isSuccessful.toString())
+                                Glide.with(this)
+                                    .load(task.result)
+                                    .into(imageViewFromFB)
+                                videoViewFromFB.isVisible=false
+                                gifViewFromFB.isVisible=false
+                                imageViewFromFB.isVisible=true
+                            } else {
+                                videoViewFromFB.isVisible = false
+                                gifViewFromFB.isVisible = false
+                                binding.imagePage.isVisible = false
+                                imageViewFromFB.isVisible = false
+                                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        // 이미지 처리 로직
+                    } else if (extension == ".mp4") {
+                        storageReference.child(key).downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                videoViewFromFB.setVideoURI(task.result)
+                                imageViewFromFB.isVisible = false
+                                videoViewFromFB.isVisible = true
+                                gifViewFromFB.isVisible = false
+                                videoViewFromFB.start()
+                            } else {
+                                imageViewFromFB.isVisible = false
+                                videoViewFromFB.isVisible = false
+                                gifViewFromFB.isVisible = false
+                                Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                        // 비디오 처리 로직
+                    } else if (extension == ".gif") {
+                        gifViewFromFB.loadUrl(storageReference.toString())
+                        imageViewFromFB.isVisible = false
+                        videoViewFromFB.isVisible = false
+                        gifViewFromFB.isVisible = true
+                        // 움짤 처리 로직
+                    }
+                    // getImagefromFB(item) 등을 호출하여 파일을 로드
+                }
             }
         }.addOnFailureListener { exception ->
-            // 처리 실패 시 예외 처리 로직
+            // 실패 처리 로직
         }
-
 
     }
 //    private fun getVideofromFB(key: String) {
@@ -329,7 +341,7 @@ class BoardInsideActivity : AppCompatActivity() {
 //        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
 //
 //            if (task.isSuccessful) {
-//                Glide.with(this)
+//                Glide.with(this-)
 //                    .load(task.result)
 //                    .into(imageViewFromFB)
 //            } else {

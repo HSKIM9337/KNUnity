@@ -116,7 +116,12 @@ class BoardWriteActivity : AppCompatActivity() {
 private fun fileUpload(key: String, uri: Uri) {
     val storage = Firebase.storage
     val storageRef = storage.reference
-    val ext = uri.lastPathSegment?.substringAfterLast(".", "") ?: ""
+    val ext = when {
+        uri.toString().contains("image") -> "png"
+        uri.toString().contains("video") -> "mp4"
+        else -> "gif"
+    }
+
     val fileRef = storageRef.child("$key.$ext")
 
     val uploadTask = fileRef.putFile(uri)
