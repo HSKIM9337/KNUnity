@@ -311,7 +311,7 @@ class HotBoardInsideActivity : AppCompatActivity() {
 
         FBRef.commentRef
             .child(mykey)
-            .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
+            .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key,mykey,FBAuth.getUid()))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
         //Log.d("colist",colist.toString())
         binding.commentArea.setText("")

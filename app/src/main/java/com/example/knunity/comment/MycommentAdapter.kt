@@ -12,6 +12,7 @@ class MycommentAdapter: ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(
         if (holder is MycommentHolder) {
             val data = getItem(position) as CommentBoardModel
             holder.bind(data)
+
         }
     }
 
@@ -21,6 +22,7 @@ class MycommentAdapter: ListAdapter<CommentBoardModel, RecyclerView.ViewHolder>(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
+
             )
         )
         return viewHolder

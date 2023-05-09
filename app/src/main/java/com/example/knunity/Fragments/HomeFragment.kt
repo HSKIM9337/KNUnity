@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
                 }
                 // 달력에 이벤트 표시하기
                 val eventDecorator = EventDecorator(
-                    ContextCompat.getColor(requireContext(), R.color.purple_200),
+                    ContextCompat.getColor(requireContext(), R.color.green),
                     eventDates,
                     requireContext()
                 )
@@ -94,6 +94,8 @@ class HomeFragment : Fragment() {
         })
 
         binding.calendarView.apply {
+            addDecorator(SundayDecorator())
+            addDecorator(SaturdayDecorator())
             // 휴무일 지정을 위한 Decorator 설정
             addDecorator(DayDisableDecorator(disabledDates, today))
             // 요일을 지정하기 위해 WeekDayFormatter 설정
@@ -101,8 +103,7 @@ class HomeFragment : Fragment() {
             // 달력 상단에 `월 년` 포맷을 수정하기 위해 TitleFormatter 설정
             setTitleFormatter(MyTitleFormatter())
             addDecorator(eventDecorator)
-            addDecorator(SundayDecorator())
-            addDecorator(SaturdayDecorator())
+
         }
     }
 
@@ -140,8 +141,8 @@ class HomeFragment : Fragment() {
         }
 
         private fun getWeekdayName(dayOfWeek: DayOfWeek): String {
-            val weekdays = arrayOf("일", "월", "화", "수", "목", "금", "토")
-            return weekdays[dayOfWeek.value - 1]
+            val weekdays = arrayOf( "월", "화", "수", "목", "금", "토","일")
+            return weekdays[dayOfWeek.value -1]
         }
     }
 

@@ -286,48 +286,46 @@ class BoardInsideActivity : AppCompatActivity() {
                     Log.d("extension", extension)
 
                     if (extension == ".png") {
-                        storageReference.child(key).downloadUrl.addOnCompleteListener{ task ->
+                        // 이미지 처리 로직
+                        imageViewFromFB.isVisible=true
+                        videoViewFromFB.isVisible=false
+                        gifViewFromFB.isVisible=false
+                        storageReference.child(key+".png").downloadUrl.addOnCompleteListener{ task ->
                             if (task.isSuccessful) {
                                 Log.d("check",task.isSuccessful.toString())
                                 Glide.with(this)
                                     .load(task.result)
                                     .into(imageViewFromFB)
-                                videoViewFromFB.isVisible=false
-                                gifViewFromFB.isVisible=false
-                                imageViewFromFB.isVisible=true
                             } else {
+                                imageViewFromFB.isVisible = true
                                 videoViewFromFB.isVisible = false
                                 gifViewFromFB.isVisible = false
-                                binding.imagePage.isVisible = false
-                                imageViewFromFB.isVisible = false
                                 Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
                             }
                         }
-                        // 이미지 처리 로직
                     } else if (extension == ".mp4") {
-                        storageReference.child(key).downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                        // 비디오 처리 로직
+                        videoViewFromFB.isVisible = true
+                        imageViewFromFB.isVisible = false
+                        gifViewFromFB.isVisible = false
+                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 videoViewFromFB.setVideoURI(task.result)
-                                imageViewFromFB.isVisible = false
-                                videoViewFromFB.isVisible = true
-                                gifViewFromFB.isVisible = false
                                 videoViewFromFB.start()
                             } else {
                                 imageViewFromFB.isVisible = false
-                                videoViewFromFB.isVisible = false
+                                videoViewFromFB.isVisible = true
                                 gifViewFromFB.isVisible = false
                                 Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
                             }
                         })
-                        // 비디오 처리 로직
                     } else if (extension == ".gif") {
-                        gifViewFromFB.loadUrl(storageReference.toString())
+                        // 움짤 처리 로직
+                        gifViewFromFB.isVisible = true
                         imageViewFromFB.isVisible = false
                         videoViewFromFB.isVisible = false
-                        gifViewFromFB.isVisible = true
-                        // 움짤 처리 로직
+                        gifViewFromFB.loadUrl(storageReference.toString())
                     }
-                    // getImagefromFB(item) 등을 호출하여 파일을 로드
                 }
             }
         }.addOnFailureListener { exception ->
@@ -335,96 +333,8 @@ class BoardInsideActivity : AppCompatActivity() {
         }
 
     }
-//    private fun getVideofromFB(key: String) {
-//        val storageReference = Firebase.storage.reference.child(key)
-//        val imageViewFromFB = binding.imagePage
-//        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//
-//            if (task.isSuccessful) {
-//                Glide.with(this-)
-//                    .load(task.result)
-//                    .into(imageViewFromFB)
-//            } else {
-//                binding.imagePage.isVisible = false
-//                imageViewFromFB.isVisible = false
-//                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-//private fun getContentFromFB(key: String) {
-//    val storageReference = Firebase.storage.reference.child(key)
-//    val imageViewFromFB = binding.imagePage
-//    val videoViewFromFB = binding.videoView
-//    val gifViewFromFB = binding.webView
-//
-//    val fileExtension = key.substringAfterLast('.')
-//    when (fileExtension) {
-//        "jpg", "jpeg", "png", "gif" -> {
-//            // 이미지 파일일 경우
-//            storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    Glide.with(this)
-//                        .load(task.result)
-//                        .into(imageViewFromFB)
-//
-//                    imageViewFromFB.isVisible = true
-//                    videoViewFromFB.isVisible = false
-//                    gifViewFromFB.isVisible = false
-//                } else {
-//                    imageViewFromFB.isVisible = false
-//                    videoViewFromFB.isVisible = false
-//                    gifViewFromFB.isVisible = false
-//                    Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
-//                }
-//            })
-//        }
-//        "mp4", "avi", "mov" -> {
-//            // 동영상 파일일 경우
-//            storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    videoViewFromFB.setVideoURI(task.result)
-//                    imageViewFromFB.isVisible = false
-//                    videoViewFromFB.isVisible = true
-//                    gifViewFromFB.isVisible = false
-//                    videoViewFromFB.start()
-//                } else {
-//                    imageViewFromFB.isVisible = false
-//                    videoViewFromFB.isVisible = false
-//                    gifViewFromFB.isVisible = false
-//                    Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
-//                }
-//            })
-//        }
-//        "gif" -> {
-//            // 움짤 파일일 경우
-//            storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//                if (task.isSuccessful) {
-////                    Glide.with(this)
-////                        .asGif()
-////                        .load(task.result)
-////                        .into(gifViewFromFB)
-//                    imageViewFromFB.isVisible = false
-//                    videoViewFromFB.isVisible = false
-//                    gifViewFromFB.isVisible = true
-//                } else {
-//                    imageViewFromFB.isVisible = false
-//                    videoViewFromFB.isVisible = false
-//                    gifViewFromFB.isVisible = false
-//                    Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
-//                }
-//            })
-//        }
-//        else -> {
-//            imageViewFromFB.isVisible = false
-//            videoViewFromFB.isVisible = false
-//            gifViewFromFB.isVisible = false
-//            Toast.makeText(this, "Unsupported content type", Toast.LENGTH_SHORT).show()
-//            return
-//        }
-//    }
-//}
 
-            private fun getCommentData(key: String) {
+    private fun getCommentData(key: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 commentDataList.clear()
@@ -486,21 +396,6 @@ class BoardInsideActivity : AppCompatActivity() {
         }
         FBRef.mycommentRef.addValueEventListener(postListener)
     }
-    private fun commentCount(key: String)
-    {
-        val commentTitle = binding.commentArea.text.toString()
-        val commentCreatedTime = FBAuth.getTime()
-        val commenteryUid = FBAuth.getUid()
-        Log.d("co_list",commentCountList.toString())
-        //    Log.d("colist2",colist.toString())
-        val mymykey = FBRef.mycommentRef.push().key.toString()
-//        val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
-//        val mykey = FBRef.commentRef.push().key.toString()
-        FBRef.mycommentRef
-            .child(key)
-            .child(FBAuth.getUid()).child(mymykey)
-            .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
-    }
 
     private fun comment(key: String) {
             val commentTitle = binding.commentArea.text.toString()
@@ -511,9 +406,10 @@ class BoardInsideActivity : AppCompatActivity() {
         val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
         val mykey = FBRef.commentRef.push().key.toString()
         Log.d("colist2",commentCountList.toString())
+
         FBRef.commentRef
             .child(mykey)
-            .setValue(CommentModel(commentTitle, commentCreatedTime, nicknametotal, key))
+            .setValue(CommentModel(commentTitle, commentCreatedTime, nicknametotal, key,mykey,FBAuth.getUid()))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
             FBRef.mycommentRef
                 .child(key)
@@ -591,7 +487,6 @@ class BoardInsideActivity : AppCompatActivity() {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
         }
-
         FBRef.likeRef.addValueEventListener(postListener)
     }
 

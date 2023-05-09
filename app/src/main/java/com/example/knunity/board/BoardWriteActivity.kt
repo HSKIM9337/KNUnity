@@ -119,17 +119,20 @@ private fun fileUpload(key: String, uri: Uri) {
     val ext = when {
         uri.toString().contains("image") -> "png"
         uri.toString().contains("video") -> "mp4"
-        else -> "gif"
+        uri.toString().contains("gif") -> "gif"  // GIF 파일 추가
+        else -> ""
     }
 
-    val fileRef = storageRef.child("$key.$ext")
+    if (ext.isNotEmpty()) {
+        val fileRef = storageRef.child("$key.$ext")
 
-    val uploadTask = fileRef.putFile(uri)
-    uploadTask.addOnFailureListener {
-        // Handle unsuccessful uploads
-    }.addOnSuccessListener { taskSnapshot ->
-        // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-        // ...
+        val uploadTask = fileRef.putFile(uri)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+        }
     }
 }
 
