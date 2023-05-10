@@ -1,15 +1,12 @@
-package com.example.knunity.board
+package com.example.knunity.job
 
 import java.io.Serializable
 
-data class LikeBoardModel(
+data class JobModel(
     val what: String="",
     val key: String="",
-    val userUid: String="",
+    var uid: String="",
     val title: String="",
     val contents: String="",
-    val time : String="",
-    val nick: String=""
+    val time : String=""
 ): Serializable
-
-
