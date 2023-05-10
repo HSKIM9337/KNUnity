@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.knunity.databinding.ActivityBoardWriteBinding
 import com.example.knunity.databinding.ActivitySecretWriteBinding
+import com.example.knunity.secret.SecretBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.google.firebase.ktx.Firebase
@@ -83,11 +84,11 @@ class SecretWriteActivity : AppCompatActivity() {
             val contents = binding.contentArea.text.toString()
             val uid = FBAuth.getUid()
             val time = FBAuth.getTime()
-            val key = FBRef.boardRef.push().key.toString()
+            val key = FBRef.secretboardRef.push().key.toString()
 
-            FBRef.boardRef
+            FBRef.secretboardRef
                 .child(key)
-                .setValue(BoardModel(key,uid, title, contents, time))
+                .setValue(SecretBoardModel("비밀게시판",key,uid, title, contents, time))
             //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
             Toast.makeText(this, "게시글을 썼습니다", Toast.LENGTH_SHORT).show()
             if (isImageUpload) {

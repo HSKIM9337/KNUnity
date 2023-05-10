@@ -1,45 +1,75 @@
 package com.example.knunity
 
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.knunity.Fragments.*
+import com.example.knunity.board.BoardMyListActivity
 import com.example.knunity.databinding.ActivityMainBinding
+import com.example.knunity.firebaseAuth.ChangeActivity
 import com.example.knunity.firebaseAuth.IntroActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         auth = Firebase.auth
-        setDefaultFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, HomeFragment())
+            .commit()
+
+        binding.settingBtn.setOnClickListener{
+            val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_profile -> {
+                    val intent = Intent(this, ChangeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    // 개인정보 화면으로 이동
+                    true
+                }
+                R.id.menu_settings -> {
+                    // 설정 화면으로 이동
+                    binding.bottomNavigationView.menu.getItem(4).isChecked=true
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, OptionFragment())
+                        .commit()
+                    true
+                }
+                R.id.menu_logout -> {
+                   logout() // 로그아웃 처리
+                    true
+                }
+                else -> false
+            }
+        }
+
         setupBottomNavigationView()
-        logout()
     }
 
     private fun logout() {
-        binding.settingBtn.setOnClickListener {
+
             auth.signOut()
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
             finish()
             Toast.makeText(this,"로그아웃하였습니다.",Toast.LENGTH_SHORT).show()
 
-        }
-    }
-    private fun setDefaultFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout,HomeFragment()).commit()
     }
 
     private fun setupBottomNavigationView() {
@@ -79,6 +109,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

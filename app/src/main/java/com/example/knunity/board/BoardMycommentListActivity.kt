@@ -40,14 +40,14 @@ class BoardMycommentListActivity : AppCompatActivity() {
     }
 
     private fun useRV() {
-        binding.rvList5.apply {
+        binding.rvList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = myRecyclerViewAdapter
         }
     }
     private fun moveWrite() {
-        binding.rvList5.setOnClickListener{
+        binding.rvList.setOnClickListener{
             val intent = Intent(this, CommentBoardInsideActivity::class.java)
             startActivity(intent)
         }

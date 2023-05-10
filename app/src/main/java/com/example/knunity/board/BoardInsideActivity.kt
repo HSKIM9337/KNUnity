@@ -1,13 +1,16 @@
 package com.example.knunity.board
 
 
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,9 +23,11 @@ import com.example.knunity.comment.MycommentModel
 import com.example.knunity.databinding.ActivityBoardInsideBinding
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
+import com.example.knunity.utils.UserModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
@@ -31,7 +36,7 @@ import com.google.firebase.storage.ktx.storage
 
 class BoardInsideActivity : AppCompatActivity() {
     private lateinit var key: String
-
+    private lateinit var nicknametotal : String
     private val binding: ActivityBoardInsideBinding by lazy {
         ActivityBoardInsideBinding.inflate(layoutInflater)
     }
@@ -50,12 +55,29 @@ class BoardInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         datas = intent.getSerializableExtra("data") as BoardModel
+        binding.whatboard.text=datas.what
         binding.titlePage.text = datas.title
         binding.contentPage.text = datas.contents
         binding.timePage.text = datas.time
+        binding.nick.text=datas.nick
         val temp_keys = datas.key
         key = temp_keys
+        FBRef.userRef.child(FBAuth.getUid()).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userModel = snapshot.getValue(UserModel::class.java)
+                nicknametotal = userModel?.nickname.toString() // 가져온 닉네임 정보
+
+                // 가져온 닉네임 정보를 사용하여 필요한 작업 수행
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 에러 발생시 처리
+                Log.w("FirebaseTest", "Failed to read value.", error.toException())
+            }
+        })
+        var currentDialog: AlertDialog? = null
         val writeuid = datas.uid
        // commentCheck(temp_keys)
         val youuid = FBAuth.getUid()
@@ -80,15 +102,44 @@ class BoardInsideActivity : AppCompatActivity() {
                     if(p2==1)
                     {
                         val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
-                        startActivity(intent)
+                        intent.putExtra("postId", datas.uid)
+                        intent.putExtra("whatb",binding.whatboard.text)
+                        intent.putExtra("thiskey",key)
+                       startActivity(intent)
                     }
                     if (p2 == 2) {
                         editPage(temp_keys)
                     }
-                    if (p2 == 3) {
+                    if ((p2 == 3)&&(datas.what=="자유게시판")) {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()
                             FBRef.boardRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas.what=="취업게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if((p2 == 3)&&(datas.what=="구인/구직게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.jobRef.child(temp_keys).removeValue()
                             FBRef.scrapboardRef.child(temp_keys).removeValue()
                             FBRef.comboardRef.child(temp_keys).removeValue()
                             getRemoveData(temp_keys)
@@ -110,11 +161,55 @@ class BoardInsideActivity : AppCompatActivity() {
                        //editPage(temp_keys)
                     }
                     if (p2 == 1) {
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        startActivity(intent)
-//                        val intent = Intent(this@BoardInsideActivity,BoardDeclarationActivity::class.java)
-//                        intent.putExtra("data",temp_keys)
-//                        startActivity(intent)
+                        val builder = AlertDialog.Builder(this@BoardInsideActivity)
+                        builder.setTitle("신고합니다.")
+                            .setMessage("신고하시겠습니까?")
+                            .setNegativeButton("확인") { dialog, _ ->
+                                // 현재 유저의 ID 가져오기
+                                val userId = FBAuth.getUid()
+                                val postId = temp_keys
+                                // 해당 게시물에 대한 신고 정보 가져오기
+                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.hasChild(userId)) {
+                                            // 이미 신고한 유저인 경우
+                                            Toast.makeText(this@BoardInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            // 처음 신고하는 유저인 경우
+                                            val reportId = FBRef.reportRef.child(postId).push().key
+                                            val reportData = hashMapOf(
+                                                "userId" to userId,
+                                                "timestamp" to ServerValue.TIMESTAMP
+                                            )
+                                            FBRef.reportRef.child(postId).child(userId).setValue(reportData)
+                                                .addOnSuccessListener {
+                                                    // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@BoardInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+                                // 삭제 여부 확인하기
+                                dialog.dismiss()
+                                currentDialog = null
+                            }
+                            .setPositiveButton("취소")
+                            {dialog,_->
+                                dialog.dismiss()
+                                currentDialog = null
+                            }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+                        currentDialog = alertDialog
+                        binding.spinner.setSelection(0)
                     }
                 }
 
@@ -123,6 +218,24 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
             }
         }
+        FBRef.reportRef.child(temp_keys).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.childrenCount >= 2) {
+                    // 두 명 이상이 신고한 경우
+                    // 게시물 삭제 처리하기
+                    FBRef.reportRef.child(temp_keys).removeEventListener(this) // 이벤트 리스너 등록 해제
+                    FBRef.secretboardRef.child(temp_keys).removeValue()
+                        .addOnSuccessListener {
+                            Toast.makeText(this@BoardInsideActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this@BoardInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
         //commentCheck(temp_keys)
         //Log.d("cocheck",commentCountList.toString())
         likeCheck(temp_keys)
@@ -155,7 +268,70 @@ class BoardInsideActivity : AppCompatActivity() {
         getCommentData(temp_keys)
         onBackPressed()
         useRV2()
-        getImagefromFB(temp_keys + ".png")
+        //getContentFromFB(temp_keys)
+        getImagefromFB(temp_keys)
+    }
+
+    private fun getImagefromFB(key: String) {
+        val storageReference = Firebase.storage.reference
+        val imageViewFromFB = binding.imagePage
+        val videoViewFromFB = binding.videoView
+        val gifViewFromFB = binding.webView
+        storageReference.listAll().addOnSuccessListener { listResult ->
+            listResult.items.forEach { item ->
+
+                if (item.name.substring(0, item.name.length - 4) == key) {
+                    // key와 일치하는 파일을 찾음
+                    val extension = item.name.takeLast(4).lowercase() // 파일 이름에서 마지막 4글자 추출
+                    Log.d("extension", extension)
+
+                    if (extension == ".png") {
+                        // 이미지 처리 로직
+                        imageViewFromFB.isVisible=true
+                        videoViewFromFB.isVisible=false
+                        gifViewFromFB.isVisible=false
+                        storageReference.child(key+".png").downloadUrl.addOnCompleteListener{ task ->
+                            if (task.isSuccessful) {
+                                Log.d("check",task.isSuccessful.toString())
+                                Glide.with(this)
+                                    .load(task.result)
+                                    .into(imageViewFromFB)
+                            } else {
+                                imageViewFromFB.isVisible = true
+                                videoViewFromFB.isVisible = false
+                                gifViewFromFB.isVisible = false
+                                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else if (extension == ".mp4") {
+                        // 비디오 처리 로직
+                        videoViewFromFB.isVisible = true
+                        imageViewFromFB.isVisible = false
+                        gifViewFromFB.isVisible = false
+                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                videoViewFromFB.setVideoURI(task.result)
+                                videoViewFromFB.start()
+                            } else {
+                                imageViewFromFB.isVisible = false
+                                videoViewFromFB.isVisible = true
+                                gifViewFromFB.isVisible = false
+                                Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    } else if (extension == ".gif") {
+                        // 움짤 처리 로직
+                        gifViewFromFB.isVisible = true
+                        imageViewFromFB.isVisible = false
+                        videoViewFromFB.isVisible = false
+                        gifViewFromFB.loadUrl(storageReference.toString())
+                    }
+                }
+            }
+        }.addOnFailureListener { exception ->
+            // 실패 처리 로직
+        }
+
     }
 
     private fun getCommentData(key: String) {
@@ -220,21 +396,6 @@ class BoardInsideActivity : AppCompatActivity() {
         }
         FBRef.mycommentRef.addValueEventListener(postListener)
     }
-    private fun commentCount(key: String)
-    {
-        val commentTitle = binding.commentArea.text.toString()
-        val commentCreatedTime = FBAuth.getTime()
-        val commenteryUid = FBAuth.getUid()
-        Log.d("co_list",commentCountList.toString())
-        //    Log.d("colist2",colist.toString())
-        val mymykey = FBRef.mycommentRef.push().key.toString()
-//        val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
-//        val mykey = FBRef.commentRef.push().key.toString()
-        FBRef.mycommentRef
-            .child(key)
-            .child(FBAuth.getUid()).child(mymykey)
-            .setValue(MycommentModel(key,datas.uid, datas.title, datas.contents, datas.time))
-    }
 
     private fun comment(key: String) {
             val commentTitle = binding.commentArea.text.toString()
@@ -245,9 +406,10 @@ class BoardInsideActivity : AppCompatActivity() {
         val coUid = "익명"+commentCountList.indexOf(FBAuth.getUid())
         val mykey = FBRef.commentRef.push().key.toString()
         Log.d("colist2",commentCountList.toString())
+
         FBRef.commentRef
             .child(mykey)
-            .setValue(CommentModel(commentTitle, commentCreatedTime, coUid, key))
+            .setValue(CommentModel(commentTitle, commentCreatedTime, nicknametotal, key,mykey,FBAuth.getUid()))
         Toast.makeText(this, "댓글 입력 완료", Toast.LENGTH_SHORT).show()
             FBRef.mycommentRef
                 .child(key)
@@ -263,7 +425,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.comboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(CommentBoardModel("자유게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun useRV2() {
@@ -281,21 +443,7 @@ class BoardInsideActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun getImagefromFB(key: String) {
-        val storageReference = Firebase.storage.reference.child(key)
-        val imageViewFromFB = binding.imagePage
-        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(this)
-                    .load(task.result)
-                    .into(imageViewFromFB)
-            } else {
-                binding.imagePage.isVisible = false
-                imageViewFromFB.isVisible = false
-                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {
@@ -327,7 +475,7 @@ class BoardInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("자유게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time,datas.nick))
                 }
                 else
                 {
@@ -339,7 +487,6 @@ class BoardInsideActivity : AppCompatActivity() {
                 Log.w("check", "loadPost:onCancelled", error.toException())
             }
         }
-
         FBRef.likeRef.addValueEventListener(postListener)
     }
 
@@ -390,7 +537,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
            // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(ScrapModel("자유게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun unscrap(key: String) {
@@ -398,3 +545,7 @@ class BoardInsideActivity : AppCompatActivity() {
     }
 
 }
+//게시판 이름 맞춰서 데이터베이스 저장
+//신고 게시판 완성
+//프레그먼트 즐겨찾기 완성
+//나머지 게시판 완성(비밀게시판은 익명,나머지는 공개)

@@ -14,6 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
+            android:name=".firebaseAuth.ChangeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".calendar.MemoActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".board.BoardSecretInsideActivity"
             android:exported="false">
             <meta-data
@@ -86,6 +100,27 @@ activity
                 android:value="" />
         </activity>
         <activity
+            android:name=".board.IncruitListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.IncruitInsideActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.IncruitWriteActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".board.BoardLikeListActivity"
             android:exported="false">
             <meta-data
@@ -103,6 +138,27 @@ activity
         -->
         <activity
             android:name=".board.BoradScrapListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.JobListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.JobInsideActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.JobWriteActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

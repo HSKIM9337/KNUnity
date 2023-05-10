@@ -82,19 +82,14 @@ class BoardEditActivity : AppCompatActivity() {
     }
 
     private fun getBoardData(key: String) {
-
         val postListener = object : ValueEventListener {
-
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dataModel = snapshot.getValue(BoardModel::class.java)
                 binding.titleArea.setText(dataModel?.title)
                 binding.contentArea.setText(dataModel?.contents)
                 writerUid = dataModel!!.uid
-
             }
-
             override fun onCancelled(error: DatabaseError) {
-
             }
         }
         FBRef.boardRef.child(key).addValueEventListener(postListener)
@@ -123,10 +118,7 @@ class BoardEditActivity : AppCompatActivity() {
         // Get the data from an ImageView as bytes
         val storage = Firebase.storage
         val storageRef = storage.reference
-
-
         val mountainsRef = storageRef.child(key + ".png")
-
         val imageView = binding.imageArea
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()

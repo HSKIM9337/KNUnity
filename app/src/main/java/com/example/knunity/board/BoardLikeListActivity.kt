@@ -35,17 +35,18 @@ class BoardLikeListActivity : AppCompatActivity() {
             useRV()
             //move_to()
             moveWrite()
+
         }
 
         private fun useRV() {
-            binding.rvList4.apply {
+            binding.rvList.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                 adapter = myRecyclerViewAdapter
             }
         }
         private fun moveWrite() {
-            binding.rvList4.setOnClickListener{
+            binding.rvList.setOnClickListener{
                 val intent = Intent(this, HotBoardInsideActivity::class.java)
                 startActivity(intent)
             }

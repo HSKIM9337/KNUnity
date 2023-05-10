@@ -25,6 +25,10 @@ class BoardFragment : Fragment() {
         comment_to()
         scrap_to()
         like_to()
+        job_to()
+        secret_to()
+        incruit_to()
+       // favorite()
         return binding.root
     }
 
@@ -33,6 +37,12 @@ class BoardFragment : Fragment() {
         super.onDestroyView()
     }
 
+
+    private fun favorite()
+    {
+        val free = binding.linearLayout3.getChildAt(0)
+
+    }
     private fun my_to() {
         binding.MyBoardET.setOnClickListener {
             val intent = Intent(context,BoardMyListActivity::class.java)
@@ -60,6 +70,27 @@ class BoardFragment : Fragment() {
     private fun like_to() {
         binding.LikeListET.setOnClickListener {
             val intent = Intent(context,BoardLikeListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun job_to()
+    {
+        binding.JobET.setOnClickListener {
+            val intent=Intent(context,JobListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun secret_to()
+    {
+        binding.SecretET.setOnClickListener {
+            val intent = Intent(context,BoardSecretListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun incruit_to()
+    {
+        binding.incruitET.setOnClickListener{
+            val intent = Intent(context,IncruitListActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.knunity.firebaseAuth
 
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,6 +14,10 @@ class GMailSender : Authenticator() {
 
     val fromEmail = "hskim9337@knu.ac.kr"
     val password = "oduerzfklowbohcx"
+    val code = (100..10000).random().toString()
+//    val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+//        throwable.printStackTrace()
+//    }
 
 
     // 보내는 사람 계정 확인
@@ -23,10 +28,10 @@ class GMailSender : Authenticator() {
     // 메일 보내기
     fun sendEmail(toEmail: String): String {
 
-        val code = (100..10000).random().toString()
-
         CoroutineScope(Dispatchers.IO).launch {
             val props = Properties()
+
+
 
             props.setProperty("mail.transport.protocol", "smtp")
             props.setProperty("mail.host", "smtp.gmail.com")
@@ -50,8 +55,8 @@ class GMailSender : Authenticator() {
             message.setText("KNUnity 에서 보낸 코드입니다. 아래 비밀번호를 인증창에 입력해주세요\n" + "<" + code + ">")                                               // 이메일 내용
 
             // 전송
-
             Transport.send(message)
+
 
         }
         return code

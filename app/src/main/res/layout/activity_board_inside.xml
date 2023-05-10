@@ -33,12 +33,12 @@
                         android:src="@drawable/ic_baseline_arrow_back_24" />
 
                     <TextView
+                        android:id="@+id/whatboard"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:text="자유게시판"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -67,11 +67,18 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/nick"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:gravity="right"
+                    android:text="닉네임"
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/timePage"
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
+                    android:layout_height="15dp"
                     android:gravity="right"
                     android:text="시간"
                     android:textSize="10sp" />
@@ -138,7 +145,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_gravity="center"
+                    android:visibility="visible"
                     android:layout_margin="10dp" />
+                <VideoView
+                    android:id="@+id/videoView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone" />
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

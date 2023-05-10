@@ -41,14 +41,14 @@ private val binding: ActivityBoradScrapListBinding by lazy {
     }
 
     private fun useRV() {
-        binding.rvList3.apply {
+        binding.rvList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = myRecyclerViewAdapter
         }
     }
     private fun moveWrite() {
-        binding.rvList3.setOnClickListener{
+        binding.rvList.setOnClickListener{
             val intent = Intent(this, ScrapInsideActivity::class.java)
             startActivity(intent)
         }
