@@ -12,6 +12,13 @@ class LikeViewHolder (private val binding: LikeListItemViewBinding) :
             titleLi.text = data.title
             contentsLi.text = data.contents
             timeLi.text = data.time
+            if(data.what.equals("비밀게시판"))
+            {
+                nick.text="익명"
+            }
+            else {
+                nick.text = data.nick
+            }
             // uidTv.text =data.uid
             itemView.setOnClickListener{
                 val intent = Intent(context, HotBoardInsideActivity::class.java).apply {

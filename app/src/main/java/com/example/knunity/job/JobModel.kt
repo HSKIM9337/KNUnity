@@ -8,5 +8,6 @@ data class JobModel(
     var uid: String="",
     val title: String="",
     val contents: String="",
-    val time : String=""
+    val time : String="",
+    val nick : String=""
 ): Serializable

@@ -14,6 +14,13 @@ class MycommentHolder (private val binding: MycommentListItemViewBinding) :
             titleMyco.text = data.title
             contentsMyco.text = data.contents
             timeMyco.text = data.time
+            if(data.what.equals("비밀게시판"))
+            {
+                nick.text="익명"
+            }
+            else {
+                nick.text = data.nick
+            }
             // uidTv.text =data.uid
             itemView.setOnClickListener{
                 val intent = Intent(context, CommentBoardInsideActivity::class.java).apply {

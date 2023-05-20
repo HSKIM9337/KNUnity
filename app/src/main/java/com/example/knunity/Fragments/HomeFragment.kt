@@ -92,7 +92,15 @@ class HomeFragment : Fragment() {
                 Log.e(TAG, "onCancelled", error.toException())
             }
         })
+        fun onStart() {
+            super.onStart()
+            binding.calendarView.addDecorator(eventDecorator)
+        }
 
+        fun onStop() {
+            super.onStop()
+            binding.calendarView.removeDecorator(eventDecorator)
+        }
         binding.calendarView.apply {
             addDecorator(SundayDecorator())
             addDecorator(SaturdayDecorator())

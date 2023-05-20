@@ -1,20 +1,20 @@
 package com.example.knunity.board
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.knunity.Fragments.BoardFragment
-import com.example.knunity.databinding.ActivityBoardEditBinding
+import com.example.knunity.databinding.ActivityJobEditBinding
+import com.example.knunity.databinding.ActivitySecretEditBinding
+import com.example.knunity.job.JobModel
+import com.example.knunity.secret.SecretBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.example.knunity.utils.UserModel
@@ -24,18 +24,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.io.ByteArrayOutputStream
 
-class BoardEditActivity : AppCompatActivity() {
+class SecretEditActivity : AppCompatActivity() {
     private lateinit var key: String
     private var isFileUpload = false
     private var selectedFileUri: Uri? = null
     private var isVideoSelected = false
     private lateinit var nick : String
-    private val binding: ActivityBoardEditBinding by lazy {
-        ActivityBoardEditBinding.inflate(layoutInflater)
+    private val binding: ActivitySecretEditBinding by lazy {
+        ActivitySecretEditBinding.inflate(layoutInflater)
     }
-    private lateinit var datas: BoardModel
+    private lateinit var datas: SecretBoardModel
     private val Tag = BoardEditActivity::class.java.simpleName
     private lateinit var writerUid: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,18 +118,18 @@ class BoardEditActivity : AppCompatActivity() {
         onBackPressed()
         binding.editBtn.setOnClickListener {
             editBoardData(key)
-            intent = Intent(this, BoardListActivity::class.java)
+            intent = Intent(this, BoardSecretListActivity::class.java)
             Toast.makeText(this, "수정완료", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
     }
 
     private fun editBoardData(key: String) {
-        FBRef.boardRef
+        FBRef.secretboardRef
             .child(key)
             .setValue(
-                BoardModel(
-                    "자유게시판", key, writerUid, binding.titleArea.text.toString(), binding.contentArea.text.toString(), FBAuth.getTime(),nick)
+                SecretBoardModel(
+                    "비밀게시판", key, writerUid, binding.titleArea.text.toString(), binding.contentArea.text.toString(), FBAuth.getTime(),nick)
             )
         if (isFileUpload && selectedFileUri  != null) {
             fileUpload(key, selectedFileUri !!)
@@ -146,15 +145,15 @@ class BoardEditActivity : AppCompatActivity() {
     private fun getBoardData(key: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val dataModel = snapshot.getValue(BoardModel::class.java)
+                val dataModel = snapshot.getValue(SecretBoardModel::class.java)
                 binding.titleArea.setText(dataModel?.title)
                 binding.contentArea.setText(dataModel?.contents)
-                writerUid = dataModel!!.uid
+                writerUid = dataModel!!.userUid
             }
             override fun onCancelled(error: DatabaseError) {
             }
         }
-        FBRef.boardRef.child(key).addValueEventListener(postListener)
+        FBRef.secretboardRef.child(key).addValueEventListener(postListener)
     }
 
     private fun getImagefromFB(key: String) {
@@ -193,17 +192,18 @@ class BoardEditActivity : AppCompatActivity() {
                         videoViewFromFB.isVisible = true
                         imageViewFromFB.isVisible = false
                         gifViewFromFB.isVisible = false
-                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                videoViewFromFB.setVideoURI(task.result)
-                                videoViewFromFB.start()
-                            } else {
-                                imageViewFromFB.isVisible = false
-                                videoViewFromFB.isVisible = true
-                                gifViewFromFB.isVisible = false
-                                Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(
+                            OnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    videoViewFromFB.setVideoURI(task.result)
+                                    videoViewFromFB.start()
+                                } else {
+                                    imageViewFromFB.isVisible = false
+                                    videoViewFromFB.isVisible = true
+                                    gifViewFromFB.isVisible = false
+                                    Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
+                                }
+                            })
                     } else if (extension == ".gif") {
                         // 움짤 처리 로직
                         gifViewFromFB.isVisible = true
@@ -241,34 +241,7 @@ class BoardEditActivity : AppCompatActivity() {
             }
         }
     }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == RESULT_OK && requestCode == 10) {
-//            binding.imageArea.setImageURI(data?.data)
-//        }
-//    }
 
-    private fun write(key: String) {
-        binding.editBtn.setOnClickListener {
-            val title = binding.titleArea.text.toString()
-            val contents = binding.contentArea.text.toString()
-            val uid = FBAuth.getUid()
-            val time = FBAuth.getTime()
-            val key = FBRef.boardRef.push().key.toString()
-
-            FBRef.boardRef
-                .child(key)
-                .setValue(BoardModel(key, uid, title, contents, time))
-            //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
-            Toast.makeText(this, "게시글을 썼습니다", Toast.LENGTH_SHORT).show()
-            if (isFileUpload && selectedFileUri  != null) {
-                fileUpload(key, selectedFileUri !!)
-            }
-            finish()
-
-        }
-    }
 
     override fun onBackPressed() {
         binding.writeBack.setOnClickListener {

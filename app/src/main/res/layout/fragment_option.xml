@@ -43,6 +43,7 @@
 
 
                     <TextView
+                        android:id="@+id/nickChange"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_margin="15dp"
@@ -121,6 +122,7 @@
 
 
                     <TextView
+                        android:id="@+id/inquire"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_margin="15dp"
@@ -311,6 +313,7 @@
 
 
                     <TextView
+                        android:id="@+id/logout"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_margin="15dp"

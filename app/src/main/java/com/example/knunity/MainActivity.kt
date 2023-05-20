@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.knunity.Fragments.*
-import com.example.knunity.board.BoardMyListActivity
 import com.example.knunity.databinding.ActivityMainBinding
 import com.example.knunity.firebaseAuth.ChangeActivity
 import com.example.knunity.firebaseAuth.IntroActivity

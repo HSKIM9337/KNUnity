@@ -27,6 +27,7 @@ class FBRef {
         val reportRef=database.getReference("reports")
         val userreportRef=database.getReference("user_reports")
         val memoRef = database.getReference("memo")
+        val myref = database.getReference("mylist")
        //val addlikeRef= database.getReference("likeboard").child()
     }
 }

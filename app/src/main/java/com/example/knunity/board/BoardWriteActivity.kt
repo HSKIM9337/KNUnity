@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.knunity.databinding.ActivityBoardWriteBinding
+import com.example.knunity.secret.SecretBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.example.knunity.utils.FBRef.Companion.userRef
@@ -152,6 +153,10 @@ private fun fileUpload(key: String, uri: Uri) {
                 if (isFileUpload && selectedFileUri  != null) {
                     fileUpload(key, selectedFileUri !!)
                 }
+            FBRef.myref
+                .child(key)
+                .setValue(SecretBoardModel("자유게시판",key,uid, title, contents, time,nick))
+
             finish()
                // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
 

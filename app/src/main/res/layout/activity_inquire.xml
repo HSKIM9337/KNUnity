@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".board.SecretWriteActivity"
+    tools:context=".option.InquireActivity"
     >
     <ScrollView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
 
 
                 <TextView
-                    android:text="글 쓰기"
+                    android:text="문의하기"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
@@ -44,15 +44,6 @@
                 android:background="@color/main_color"/-->
 
 
-            <EditText
-                android:id="@+id/titleArea"
-                android:layout_margin="20dp"
-                android:layout_width="match_parent"
-                android:background="@android:color/transparent"
-                android:layout_height="20dp"
-                android:hint="제목"
-                tools:ignore="SpeakableTextPresentCheck" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -65,36 +56,13 @@
                 android:id="@+id/contentArea"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
-                android:hint="내용"
+                android:background="@android:drawable/editbox_background"
+                android:hint="문의 내용"
                 android:gravity="left|top"
                 android:scrollbars="vertical"
                 android:layout_height="wrap_content"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <ImageView
-                android:layout_gravity="center"
-                android:id="@+id/imageArea"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:visibility="visible"
-                android:src="@drawable/ic_baseline_camera_alt_24"
+                tools:ignore="SpeakableTextPresentCheck"
                 />
-            <VideoView
-                android:id="@+id/videoView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:visibility="gone" />
-            <WebView
-                android:id="@+id/webView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:visibility="gone" />
 
             <Button
                 android:id="@+id/writebtn"

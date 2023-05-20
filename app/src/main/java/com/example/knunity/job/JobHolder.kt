@@ -10,7 +10,6 @@ import com.example.knunity.databinding.JobListItemViewBinding
 
 class JobHolder (private val binding: JobListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
     private val context = binding.root.context
     fun bind(data: JobModel) {
         with(binding) {
@@ -18,6 +17,7 @@ class JobHolder (private val binding: JobListItemViewBinding) :
             contentsTv.text = data.contents
             timeTv.text = data.time
             // uidTv.text =data.uid
+            nick.text=data.nick
             itemView.setOnClickListener{
                 val intent = Intent(context, JobInsideActivity::class.java).apply {
                     putExtra("data",data)

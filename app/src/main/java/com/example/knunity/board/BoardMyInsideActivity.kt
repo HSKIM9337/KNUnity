@@ -25,8 +25,9 @@ import com.example.knunity.comment.CommentAdapter
 import com.example.knunity.comment.CommentBoardModel
 import com.example.knunity.comment.CommentModel
 import com.example.knunity.comment.MycommentModel
-import com.example.knunity.databinding.ActivityCommentBoardInsideBinding
+import com.example.knunity.databinding.ActivityBoardMyInsideBinding
 import com.example.knunity.databinding.ActivityHotBoardInsideBinding
+import com.example.knunity.mylist.MylistModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
 import com.example.knunity.utils.UserModel
@@ -39,16 +40,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 
-class CommentBoardInsideActivity : AppCompatActivity() {
+class BoardMyInsideActivity : AppCompatActivity() {
     private lateinit var key: String
-    private lateinit var nicknametotal : String
-    private val binding: ActivityCommentBoardInsideBinding by lazy {
-        ActivityCommentBoardInsideBinding.inflate(layoutInflater)
+    private lateinit var nicknametotal:String
+    private val binding: ActivityBoardMyInsideBinding by lazy {
+        ActivityBoardMyInsideBinding.inflate(layoutInflater)
     }
     private val myRecyclerViewAdapter2: CommentAdapter by lazy {
         CommentAdapter()
     }
-    lateinit var datas2: CommentBoardModel
+    lateinit var datas2: MylistModel
     private val commentDataList = mutableListOf<CommentModel>()
     private val commentKeyList = mutableListOf<String>()
     private val likeList = mutableListOf<String>()
@@ -61,7 +62,7 @@ class CommentBoardInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        datas2 = intent.getSerializableExtra("data") as CommentBoardModel
+        datas2 = intent.getSerializableExtra("data") as MylistModel
         binding.whatboard.text=datas2.what
         binding.titlePage.text = datas2.title
         binding.contentPage.text = datas2.contents
@@ -73,8 +74,14 @@ class CommentBoardInsideActivity : AppCompatActivity() {
         else
         {
             binding.nick.text=datas2.what
-
         }
+        var currentDialog: AlertDialog? = null
+        val temp_keys = datas2.key
+        //key = temp_keys
+        val writeuid = datas2.userUid
+        // commentCheck(temp_keys)
+        val youuid = FBAuth.getUid()
+        val text = binding.contentPage.text.toString()
         FBRef.userRef.child(FBAuth.getUid()).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userModel = snapshot.getValue(UserModel::class.java)
@@ -88,13 +95,6 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                 Log.w("FirebaseTest", "Failed to read value.", error.toException())
             }
         })
-        var currentDialog: AlertDialog? = null
-        val temp_keys = datas2.key
-        //key = temp_keys
-        val writeuid = datas2.userUid
-        // commentCheck(temp_keys)
-        val youuid = FBAuth.getUid()
-        val text=binding.contentPage.text.toString()
         val spinner1 = arrayListOf<String>("▼","신고", "수정", "삭제")
         //  val spinner1 = arrayListOf<String>("신고", "수정", "삭제")
         val spinner2 = arrayListOf<String>("▼","신고")
@@ -127,7 +127,7 @@ class CommentBoardInsideActivity : AppCompatActivity() {
 
                     }
                     if (p2 == 1) {
-                        val builder = AlertDialog.Builder(this@CommentBoardInsideActivity)
+                        val builder = AlertDialog.Builder(this@BoardMyInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
                             .setNegativeButton("확인") { dialog, _ ->
@@ -135,11 +135,12 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                                 val userId = FBAuth.getUid()
                                 val postId = temp_keys
                                 // 해당 게시물에 대한 신고 정보 가져오기
-                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object :
+                                    ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         if (snapshot.hasChild(userId)) {
                                             // 이미 신고한 유저인 경우
-                                            Toast.makeText(this@CommentBoardInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this@BoardMyInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
                                         } else {
                                             // 처음 신고하는 유저인 경우
                                             val reportId = FBRef.reportRef.child(postId).push().key
@@ -150,16 +151,16 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                                             FBRef.reportRef.child(postId).child(userId).setValue(reportData)
                                                 .addOnSuccessListener {
                                                     // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
-                                                    Toast.makeText(this@CommentBoardInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardMyInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                                                 }
                                                 .addOnFailureListener { e ->
-                                                    Toast.makeText(this@CommentBoardInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardMyInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
                                                 }
                                         }
                                     }
 
                                     override fun onCancelled(error: DatabaseError) {
-                                        Toast.makeText(this@CommentBoardInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@BoardMyInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
                                     }
 
                                 })
@@ -181,30 +182,17 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                         if(datas2.what.equals("자유게시판")) {
                             editPage(temp_keys)
                         }
-                        if(datas2.what.equals("비밀게시판")) {
-                            editPage3(temp_keys)
-                        }
                         if(datas2.what.equals("취업게시판")) {
                             editPage2(temp_keys)
+                        }
+                        if(datas2.what.equals("비밀게시판")) {
+                            editPage3(temp_keys)
                         }
                     }
                     if ((p2 == 3)&&(datas2.what=="자유게시판")) {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()
                             FBRef.boardRef.child(temp_keys).removeValue()
-                            FBRef.scrapboardRef.child(temp_keys).removeValue()
-                            FBRef.comboardRef.child(temp_keys).removeValue()
-                            getRemoveData(temp_keys)
-                            finish()
-                        } catch (e: StorageException) {
-                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    if((p2 == 3)&&(datas2.what=="비밀게시판"))
-                    {
-                        try {
-                            FBRef.likeboardRef.child(temp_keys).removeValue()
-                            FBRef.secretboardRef.child(temp_keys).removeValue()
                             FBRef.scrapboardRef.child(temp_keys).removeValue()
                             FBRef.comboardRef.child(temp_keys).removeValue()
                             getRemoveData(temp_keys)
@@ -239,6 +227,19 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                             Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
                         }
                     }
+                    if((p2 == 3)&&(datas2.what=="비밀게시판"))
+                    {
+                        try {
+                            FBRef.likeboardRef.child(temp_keys).removeValue()
+                            FBRef.secretboardRef.child(temp_keys).removeValue()
+                            FBRef.scrapboardRef.child(temp_keys).removeValue()
+                            FBRef.comboardRef.child(temp_keys).removeValue()
+                            getRemoveData(temp_keys)
+                            finish()
+                        } catch (e: StorageException) {
+                            Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     TODO("Not yet implemented")
@@ -253,7 +254,7 @@ class CommentBoardInsideActivity : AppCompatActivity() {
 
                     }
                     if(p2==1){
-                        val builder = AlertDialog.Builder(this@CommentBoardInsideActivity)
+                        val builder = AlertDialog.Builder(this@BoardMyInsideActivity)
                         builder.setTitle("신고합니다.")
                             .setMessage("신고하시겠습니까?")
                             .setNegativeButton("확인") { dialog, _ ->
@@ -261,11 +262,12 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                                 val userId = FBAuth.getUid()
                                 val postId = temp_keys
                                 // 해당 게시물에 대한 신고 정보 가져오기
-                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object :
+                                    ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         if (snapshot.hasChild(userId)) {
                                             // 이미 신고한 유저인 경우
-                                            Toast.makeText(this@CommentBoardInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this@BoardMyInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
                                         } else {
                                             // 처음 신고하는 유저인 경우
                                             val reportId = FBRef.reportRef.child(postId).push().key
@@ -276,16 +278,16 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                                             FBRef.reportRef.child(postId).child(userId).setValue(reportData)
                                                 .addOnSuccessListener {
                                                     // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
-                                                    Toast.makeText(this@CommentBoardInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardMyInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                                                 }
                                                 .addOnFailureListener { e ->
-                                                    Toast.makeText(this@CommentBoardInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardMyInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
                                                 }
                                         }
                                     }
 
                                     override fun onCancelled(error: DatabaseError) {
-                                        Toast.makeText(this@CommentBoardInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@BoardMyInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
                                     }
 
                                 })
@@ -508,7 +510,6 @@ class CommentBoardInsideActivity : AppCompatActivity() {
 
     }
 
-
     private fun useRV2() {
         binding.rvList2.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -535,7 +536,6 @@ class CommentBoardInsideActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
     private fun getImagefromFB(key: String) {
         val storageReference = Firebase.storage.reference
         val imageViewFromFB = binding.imagePage
@@ -572,7 +572,8 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                         videoViewFromFB.isVisible = true
                         imageViewFromFB.isVisible = false
                         gifViewFromFB.isVisible = false
-                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(
+                            OnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 videoViewFromFB.setVideoURI(task.result)
                                 videoViewFromFB.start()
@@ -632,7 +633,7 @@ class CommentBoardInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(datas2.what, FBAuth.getUid(), datas2.title, datas2.contents, datas2.time,datas2.nick))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel(key, FBAuth.getUid(), datas2.title, datas2.contents, datas2.time))
                 }
                 else
                 {
@@ -695,7 +696,7 @@ class CommentBoardInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel(datas2.what,key, FBAuth.getUid(), title, contents, time,datas2.nick))
+            .setValue(ScrapModel(key, FBAuth.getUid(), title, contents, time))
     }
 
     private fun unscrap(key: String) {

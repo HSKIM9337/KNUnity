@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".board.SecretWriteActivity"
-    >
+    tools:context=".board.JobEditActivity">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,22 +25,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_arrow_back_24"
-                    android:id="@+id/writeBack"/>
-
+                    android:id="@+id/writeBack" />
 
                 <TextView
-                    android:text="글 쓰기"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="10dp"
+                    android:text="수정하기"/>
 
             </LinearLayout>
 
             <!--LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/main_color"/-->
+                android:background="@color/gray" /-->
 
 
             <EditText
@@ -51,14 +49,14 @@
                 android:background="@android:color/transparent"
                 android:layout_height="20dp"
                 android:hint="제목"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck"  />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/gray"/>
+                android:background="@color/gray" />
 
 
             <EditText
@@ -70,7 +68,14 @@
                 android:gravity="left|top"
                 android:scrollbars="vertical"
                 android:layout_height="wrap_content"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck"/>
+
+            <!--LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/main_color" /-->
 
             <ImageView
                 android:layout_gravity="center"
@@ -97,14 +102,14 @@
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/writebtn"
-                android:text="등록"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/main_color"
-                android:layout_marginRight="20dp"
+                android:id="@+id/editBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/main_color"
+                android:text="수정" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

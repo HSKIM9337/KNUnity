@@ -101,11 +101,55 @@ class BoardInsideActivity : AppCompatActivity() {
                     }
                     if(p2==1)
                     {
-                        val intent = Intent(this@BoardInsideActivity, BoardDeclarationActivity::class.java)
-                        intent.putExtra("postId", datas.uid)
-                        intent.putExtra("whatb",binding.whatboard.text)
-                        intent.putExtra("thiskey",key)
-                       startActivity(intent)
+                        val builder = AlertDialog.Builder(this@BoardInsideActivity)
+                        builder.setTitle("신고합니다.")
+                            .setMessage("신고하시겠습니까?")
+                            .setNegativeButton("확인") { dialog, _ ->
+                                // 현재 유저의 ID 가져오기
+                                val userId = FBAuth.getUid()
+                                val postId = temp_keys
+                                // 해당 게시물에 대한 신고 정보 가져오기
+                                FBRef.reportRef.child(postId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.hasChild(userId)) {
+                                            // 이미 신고한 유저인 경우
+                                            Toast.makeText(this@BoardInsideActivity, "이미 신고하셨습니다.", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            // 처음 신고하는 유저인 경우
+                                            val reportId = FBRef.reportRef.child(postId).push().key
+                                            val reportData = hashMapOf(
+                                                "userId" to userId,
+                                                "timestamp" to ServerValue.TIMESTAMP
+                                            )
+                                            FBRef.reportRef.child(postId).child(userId).setValue(reportData)
+                                                .addOnSuccessListener {
+                                                    // Toast.makeText(this@BoardSecretInsideActivity,snapshot.childrenCount.toString(),Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@BoardInsideActivity, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Toast.makeText(this@BoardInsideActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
+                                    }
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@BoardInsideActivity, "오류가 발생했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
+                                    }
+                                })
+                                // 삭제 여부 확인하기
+
+                                dialog.dismiss()
+                                currentDialog = null
+                            }
+                            .setPositiveButton("취소")
+                            {dialog,_->
+                                dialog.dismiss()
+                                currentDialog = null
+
+                            }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+                        currentDialog = alertDialog
+                        binding.spinner.setSelection(0)
                     }
                     if (p2 == 2) {
                         editPage(temp_keys)

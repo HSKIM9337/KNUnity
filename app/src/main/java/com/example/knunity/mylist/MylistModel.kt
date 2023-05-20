@@ -1,8 +1,8 @@
-package com.example.knunity.secret
+package com.example.knunity.mylist
 
 import java.io.Serializable
 
-data class SecretBoardModel(
+data class MylistModel(
     val what : String="",
     val key: String="",
     val userUid: String="",

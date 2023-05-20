@@ -267,7 +267,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         getCommentData(temp_keys)
         onBackPressed()
         useRV2()
-        getImagefromFB(temp_keys + ".png")
+        getImagefromFB(temp_keys)
     }
 
     private fun getCommentData(key: String) {
@@ -390,7 +390,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.comboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel(key, FBAuth.getUid(), title, contents, time))
+            .setValue(CommentBoardModel("비밀게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun useRV2() {
@@ -402,27 +402,71 @@ class BoardSecretInsideActivity : AppCompatActivity() {
     }
 
     private fun editPage(key: String) {
-        val intent = Intent(this, BoardEditActivity::class.java)
+        val intent = Intent(this, SecretEditActivity::class.java)
         intent.putExtra("temp_key", datas.key)
         startActivity(intent)
         finish()
     }
 
     private fun getImagefromFB(key: String) {
-        val storageReference = Firebase.storage.reference.child(key)
+        val storageReference = Firebase.storage.reference
         val imageViewFromFB = binding.imagePage
-        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+        val videoViewFromFB = binding.videoView
+        val gifViewFromFB = binding.webView
+        storageReference.listAll().addOnSuccessListener { listResult ->
+            listResult.items.forEach { item ->
 
-            if (task.isSuccessful) {
-                Glide.with(this)
-                    .load(task.result)
-                    .into(imageViewFromFB)
-            } else {
-                binding.imagePage.isVisible = false
-                imageViewFromFB.isVisible = false
-                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+                if (item.name.substring(0, item.name.length - 4) == key) {
+                    // key와 일치하는 파일을 찾음
+                    val extension = item.name.takeLast(4).lowercase() // 파일 이름에서 마지막 4글자 추출
+                    Log.d("extension", extension)
+
+                    if (extension == ".png") {
+                        // 이미지 처리 로직
+                        imageViewFromFB.isVisible=true
+                        videoViewFromFB.isVisible=false
+                        gifViewFromFB.isVisible=false
+                        storageReference.child(key+".png").downloadUrl.addOnCompleteListener{ task ->
+                            if (task.isSuccessful) {
+                                Log.d("check",task.isSuccessful.toString())
+                                Glide.with(this)
+                                    .load(task.result)
+                                    .into(imageViewFromFB)
+                            } else {
+                                imageViewFromFB.isVisible = true
+                                videoViewFromFB.isVisible = false
+                                gifViewFromFB.isVisible = false
+                                Toast.makeText(this, key, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else if (extension == ".mp4") {
+                        // 비디오 처리 로직
+                        videoViewFromFB.isVisible = true
+                        imageViewFromFB.isVisible = false
+                        gifViewFromFB.isVisible = false
+                        storageReference.child(key+".mp4").downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                videoViewFromFB.setVideoURI(task.result)
+                                videoViewFromFB.start()
+                            } else {
+                                imageViewFromFB.isVisible = false
+                                videoViewFromFB.isVisible = true
+                                gifViewFromFB.isVisible = false
+                                Toast.makeText(this, "Failed to load content", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    } else if (extension == ".gif") {
+                        // 움짤 처리 로직
+                        gifViewFromFB.isVisible = true
+                        imageViewFromFB.isVisible = false
+                        videoViewFromFB.isVisible = false
+                        gifViewFromFB.loadUrl(storageReference.toString())
+                    }
+                }
             }
-        })
+        }.addOnFailureListener { exception ->
+            // 실패 처리 로직
+        }
     }
 
     override fun onBackPressed() {
@@ -455,7 +499,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("비밀게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("비밀게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time,datas.nick))
                 }
                 else
                 {
@@ -517,7 +561,7 @@ class BoardSecretInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel("비밀게시판",key, FBAuth.getUid(), title, contents, time))
+            .setValue(ScrapModel("비밀게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun unscrap(key: String) {

@@ -14,6 +14,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KNUnity">
         <activity
+            android:name=".option.InquireActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.BoardMyListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.BoardMyInsideActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.SecretEditActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".board.JobEditActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".firebaseAuth.ChangeActivity"
             android:exported="false">
             <meta-data
@@ -87,13 +122,6 @@ activity
         </activity>
         <activity
             android:name=".board.BoardMycommentListActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".board.BoardMyListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

@@ -12,6 +12,13 @@ class ScrapViewHolder (private val binding: ScrapListItemViewBinding) :
             titleSc.text = data.title
             contentsSc.text = data.contents
             timeSc.text = data.time
+            if(data.what.equals("비밀게시판"))
+            {
+                nick.text="익명"
+            }
+            else {
+                nick.text = data.nick
+            }
             // uidTv.text =data.uid
             itemView.setOnClickListener{
                 val intent = Intent(context, ScrapInsideActivity::class.java).apply {
