@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.knunity.Incruit.IncruitAdapter
+import com.example.knunity.Incruit.IncruitCallback
 import com.example.knunity.Incruit.IncruitModel
 import com.example.knunity.crawling.Data
 import com.example.knunity.crawling.ItemTouchHelperCallback
@@ -28,13 +29,11 @@ class IncruitListActivity : AppCompatActivity() {
     private val myRecyclerViewAdapter: IncruitAdapter by lazy {
         IncruitAdapter()
     }
-    private val boardDataList = mutableListOf<IncruitModel>()
-    private val boardKeyList = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         addData()
-        val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(binding.rvList))
+        val itemTouchHelper = ItemTouchHelper(IncruitCallback(binding.rvList))
         itemTouchHelper.attachToRecyclerView(binding.rvList)
         binding.rvList.apply {
             layoutManager =
@@ -55,28 +54,28 @@ class IncruitListActivity : AppCompatActivity() {
                 }
 
             }
+
         }
     private suspend fun crawlingData(): ArrayList<IncruitModel> {
         val dataList = arrayListOf<IncruitModel>()
 
         try {
-            val doc = Jsoup.connect("https://knujob.knu.ac.kr/").get()
+            val doc =
+                Jsoup.connect("https://home.knu.ac.kr/HOME/knujob/sub.htm?nav_code=knu1623817159")
+                    .get()
+            for (i: Int in 0..15) {
+                val num = doc.select(".num")[i].text().toString()
+                val title = doc.select(".subject")[i].text().toString()
+                Log.d("title",title)
+                        var items = IncruitModel((i+1).toString(), title)
+                        dataList.add(items)
 
-            val numElements = doc.select(".num")
-            val titleElements = doc.select(".subject")
-
-            for (i in 0 until numElements.size) {
-                val num = numElements[i].text()
-                val title = titleElements[i].text()
-
-                val item = IncruitModel(num, title)
-                dataList.add(item)
             }
-
-        } catch (e: Exception) {
+        }catch (e: Exception) {
             e.printStackTrace()
         }
         return dataList
+
     }
 //    private fun getFBBoardData() {
 //        val postListener = object : ValueEventListener {

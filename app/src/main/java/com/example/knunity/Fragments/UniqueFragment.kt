@@ -1,6 +1,7 @@
 package com.example.knunity.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,19 +96,21 @@ class UniqueFragment : Fragment() {
 
             for (i: Int in 5..15) {
                 val num = doc.select(".num")[i].text().toString()
+                Log.d("num",num)
                 val title = doc.select(".subject")[i].text().toString()
+                Log.d("title",title)
                 for (j: Int in 0..4) {
                     if (title.contains(data[j])) {
                         var items = Data(num, title)
                         dataList.add(items)
+                        Log.d("data3",dataList.toString())
                     }
                 }
-
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return dataList
+        Log.d("data222",dataList.toString())
     }
 }
