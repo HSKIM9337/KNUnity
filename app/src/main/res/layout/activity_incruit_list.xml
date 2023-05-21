@@ -49,7 +49,7 @@
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/incruit_list_item_view" />
 
-    <ImageView
+    <!--ImageView
         android:id="@+id/WriteIV"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -58,6 +58,6 @@
         android:src="@drawable/pen"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" /-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

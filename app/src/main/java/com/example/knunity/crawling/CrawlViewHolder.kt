@@ -17,10 +17,9 @@ class CrawlViewHolder (private val binding: ItemListCrawlBinding): RecyclerView.
         with(binding) {
             tvId.text = item.Num
             tvTitle.text = item.title
-
         }
-
     }
+
     fun setAlpha(alpha: Float) {
         with(binding) {
             tvId.alpha = alpha
