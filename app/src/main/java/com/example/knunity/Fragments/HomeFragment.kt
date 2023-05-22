@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -55,6 +56,31 @@ class HomeFragment : Fragment() {
                 val intent = Intent(requireContext(), MemoActivity::class.java)
                 intent.putExtra("selected_date", date)
                 startActivity(intent)
+        }
+        binding.knu.setOnClickListener{
+            val url = "https://www.knu.ac.kr" // Replace with your desired URL
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+        binding.eat.setOnClickListener{
+            val url = "https://dorm.knu.ac.kr/scdorm/_new_ver/newlife/05.php" // Replace with your desired URL
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+        binding.bus.setOnClickListener{
+            val url = "https://www.knu.ac.kr/wbbs/wbbs/contents/index.action?menu_url=intro/map03&menu_idx=27" // Replace with your desired URL
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+        binding.library.setOnClickListener{
+            val url = "https://kudos.knu.ac.kr/pages/index.htm" // Replace with your desired URL
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+        binding.gongji.setOnClickListener{
+            val url = "https://www.knu.ac.kr/wbbs/wbbs/bbs/btin/stdList.action?menu_idx=42" // Replace with your desired UR
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
         }
         return binding.root
     }
