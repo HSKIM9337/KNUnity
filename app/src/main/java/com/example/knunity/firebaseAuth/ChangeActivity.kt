@@ -97,7 +97,7 @@ class ChangeActivity : AppCompatActivity() {
                     } else {
                         isGoToJoin=false
                         // 닉네임 생성 실패
-                        Toast.makeText(this, "이미 사용 중인 닉네임입니다", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this, "이미 사용 중인 닉네임입니다", Toast.LENGTH_SHORT).show()
                     }
                 }
                 if (isGoToJoin) {

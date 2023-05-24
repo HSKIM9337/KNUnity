@@ -12,18 +12,21 @@ import com.example.knunity.firebaseAuth.ChangeActivity
 import com.example.knunity.firebaseAuth.IntroActivity
 import com.example.knunity.option.InquireActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class OptionFragment : Fragment() {
+    private lateinit var auth: FirebaseAuth
     private var _binding : FragmentOptionBinding? = null
     private val binding : FragmentOptionBinding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentOptionBinding.inflate(inflater,container,false)
+        auth = Firebase.auth
       nicknamechage()
         inquire()
         logout()
