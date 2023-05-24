@@ -202,7 +202,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:paddingLeft="50dp"
-                        android:text="취업 게시판"></TextView>
+                        android:text="취업정보게시판"></TextView>
 
                 </LinearLayout>
 
