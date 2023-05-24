@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.knunity.databinding.ActivityBoardWriteBinding
 import com.example.knunity.databinding.ActivityJobWriteBinding
 import com.example.knunity.job.JobModel
+import com.example.knunity.mylist.MylistModel
 import com.example.knunity.secret.SecretBoardModel
 import com.example.knunity.utils.FBAuth
 import com.example.knunity.utils.FBRef
@@ -152,7 +153,7 @@ class JobWriteActivity : AppCompatActivity() {
             val time = FBAuth.getTime()
             val key = FBRef.jobRef.push().key.toString()
 
-            FBRef.boardRef
+            FBRef.jobRef
                 .child(key)
                 .setValue(JobModel("구인/구직게시판",key,uid, title, contents, time,nick))
             //이미지의 이름을 문서의 key값으로 해줘서 이미지에 대한 정보를 찾기쉽게 해놓음
@@ -162,7 +163,7 @@ class JobWriteActivity : AppCompatActivity() {
             }
             FBRef.myref
                 .child(key)
-                .setValue(SecretBoardModel("구인/구직게시판",key,uid, title, contents, time,nick))
+                .setValue(MylistModel("구인/구직게시판",key,uid, title, contents, time,nick))
 
             finish()
             // Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show()
