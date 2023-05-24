@@ -166,7 +166,7 @@ class BoardInsideActivity : AppCompatActivity() {
                             Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    if((p2 == 3)&&(datas.what=="취업게시판"))
+                    if((p2 == 3)&&(datas.what=="구인/구직게시판"))
                     {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()

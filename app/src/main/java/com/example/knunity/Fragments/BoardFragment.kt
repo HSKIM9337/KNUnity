@@ -76,7 +76,7 @@ class BoardFragment : Fragment() {
     private fun job_to()
     {
         binding.JobET.setOnClickListener {
-            val intent=Intent(context,JobListActivity::class.java)
+            val intent=Intent(context,IncruitListActivity::class.java)
             startActivity(intent)
         }
     }
@@ -90,7 +90,7 @@ class BoardFragment : Fragment() {
     private fun incruit_to()
     {
         binding.incruitET.setOnClickListener{
-            val intent = Intent(context,IncruitListActivity::class.java)
+            val intent = Intent(context,JobListActivity::class.java)
             startActivity(intent)
         }
     }

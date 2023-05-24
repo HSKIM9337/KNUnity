@@ -183,7 +183,7 @@ class ScrapInsideActivity : AppCompatActivity() {
                         if(datas2.what.equals("비밀게시판")) {
                             editPage3(temp_keys)
                         }
-                        if(datas2.what.equals("취업게시판")) {
+                        if(datas2.what.equals("구인/구직게시판")) {
                             editPage2(temp_keys)
                         }
                     }
@@ -199,7 +199,7 @@ class ScrapInsideActivity : AppCompatActivity() {
                             Toast.makeText(parent, "오류", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    if((p2 == 3)&&(datas2.what=="취업게시판"))
+                    if((p2 == 3)&&(datas2.what=="구인/구직게시판"))
                     {
                         try {
                             FBRef.likeboardRef.child(temp_keys).removeValue()

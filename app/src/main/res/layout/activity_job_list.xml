@@ -22,7 +22,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="취업게시판"
+            android:text="구인/구직게시판"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"/>

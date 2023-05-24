@@ -128,7 +128,7 @@ class JobEditActivity : AppCompatActivity() {
             .child(key)
             .setValue(
                 JobModel(
-                    "취업게시판", key, writerUid, binding.titleArea.text.toString(), binding.contentArea.text.toString(), FBAuth.getTime(),nick)
+                    "구인/구직게시판", key, writerUid, binding.titleArea.text.toString(), binding.contentArea.text.toString(), FBAuth.getTime(),nick)
             )
         if (isFileUpload && selectedFileUri  != null) {
             fileUpload(key, selectedFileUri !!)

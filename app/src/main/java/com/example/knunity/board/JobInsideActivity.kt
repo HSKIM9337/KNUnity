@@ -398,7 +398,7 @@ class JobInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.comboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(CommentBoardModel("취업게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
+            .setValue(CommentBoardModel("구인/구직게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun useRV2() {
@@ -508,7 +508,7 @@ class JobInsideActivity : AppCompatActivity() {
                 }
                 if(alllikeList.size>=2)
                 {
-                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("취업게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time,datas.nick))
+                    FBRef.likeboardRef.child(key).setValue(LikeBoardModel("구인/구직게시판",key, FBAuth.getUid(), datas.title, datas.contents, datas.time,datas.nick))
                 }
                 else
                 {
@@ -570,7 +570,7 @@ class JobInsideActivity : AppCompatActivity() {
         val time = binding.timePage.text.toString()
         FBRef.scrapboardRef.child(key).child(FBAuth.getUid())
             // .setValue(ScrapModel(FBAuth.getUid()))
-            .setValue(ScrapModel("취업게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
+            .setValue(ScrapModel("구인/구직게시판",key, FBAuth.getUid(), title, contents, time,datas.nick))
     }
 
     private fun unscrap(key: String) {
